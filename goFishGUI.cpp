@@ -525,6 +525,7 @@ bool goFishGUI_state::draw() {
              SDL_Rect card {(modRank*CARDWIDTH), (suitRank*CARDHEIGHT), CARDWIDTH, CARDHEIGHT};
              SDL_Rect placeOnScreen {(w/10)+(i*100), ((h-h/3) - 55), 100, 125};
              cardsOnScreen.push_back(placeOnScreen);
+             cardRanksOnScreen[i] = playerHand.at(i).rank;
              SDL_RenderCopy(rend, tdoc, &card, &placeOnScreen); // display card image
           } // end for
 
@@ -565,7 +566,8 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
                 // display message with rank of rect being hovered over, ignore if not on a rect
                 for(int i = 0; i < cardsOnScreen.size(); i++){
                   if(checkCollision(MouseX, MouseY, cardsOnScreen.at(i))){
-                    message += " on card";
+                    message += " on card ";
+                    message += cardRanksOnScreen[i];
                     messageUpdated = true;
                   }
                 }

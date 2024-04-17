@@ -3,6 +3,7 @@
 #define __GOFISHGUI_H__
 
 #include <vector>
+#include <map>
 #include <SDL.h>
 #include <SDL2_framerate.h>
 
@@ -66,6 +67,7 @@ public:
     vector<Card> computerHand;
     vector<string> possibleComputerAsks;
     vector<SDL_Rect> cardsOnScreen;
+    string cardRanksOnScreen[52];
 
     SDL_Surface *gt = nullptr;
     SDL_Texture *tgt = nullptr;
