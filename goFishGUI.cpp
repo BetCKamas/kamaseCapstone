@@ -522,8 +522,17 @@ bool goFishGUI_state::draw() {
           for(int i = 0; i <  playerHand.size(); i++){
              modRank = getRankIntPos(playerHand.at(i).rank);
              suitRank = getSuitIntPos(playerHand.at(i).suit);
+             if(i > 0){
+               if(playerHand.at(i).rank == playerHand.at(i-1).rank){
+                 space = (cardsOnScreen.at(i-1).x) + 40;
+               } else {
+                 space += 100;
+               }
+             } else {
+               space = (w/10);
+             }
              SDL_Rect card {(modRank*CARDWIDTH), (suitRank*CARDHEIGHT), CARDWIDTH, CARDHEIGHT};
-             SDL_Rect placeOnScreen {(w/10)+(i*100), ((h-h/3) - 55), 100, 125};
+             SDL_Rect placeOnScreen {space, ((h-h/3) - 55), 100, 125};
              cardsOnScreen.push_back(placeOnScreen);
              cardRanksOnScreen[i] = playerHand.at(i).rank;
              SDL_RenderCopy(rend, tdoc, &card, &placeOnScreen); // display card image

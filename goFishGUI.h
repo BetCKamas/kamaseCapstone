@@ -97,6 +97,7 @@ public:
     //SDL_Rect card;
     //SDL_Rect cardScreen = {w/10, (h-h/3) - 55, 100, 125};
     int MouseX, MouseY;
+    int space = 0;
 
 
 
