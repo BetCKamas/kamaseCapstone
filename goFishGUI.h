@@ -3,7 +3,6 @@
 #define __GOFISHGUI_H__
 
 #include <vector>
-#include <map>
 #include <SDL.h>
 #include <SDL2_framerate.h>
 

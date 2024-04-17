@@ -563,7 +563,7 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     switch(e.type) {
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          case SDLK_SPACE:  transition("mainArea"); result = true;   break;
+          //case SDLK_SPACE:  transition("mainArea"); result = true;   break;
           default:  break;
         } break;
       case SDL_MOUSEBUTTONDOWN:
