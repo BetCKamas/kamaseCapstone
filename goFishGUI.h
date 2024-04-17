@@ -59,12 +59,13 @@ public:
     bool checkForBook(int playerCheckingBook, string cardAskedFor);
     void removeBookFromHand(int playerHasBook, string cardToBeRemoved);
     void takeTurn(int whosTurn, bool& playerTurn, bool& computerTurn);
-    bool checkGameOver();
+    void checkGameOver();
 
     vector<Card> deck;
     vector<Card> playerHand;
     vector<Card> computerHand;
     vector<string> possibleComputerAsks;
+    vector<SDL_Rect> cardsOnScreen;
 
     SDL_Surface *gt = nullptr;
     SDL_Texture *tgt = nullptr;
@@ -74,7 +75,7 @@ public:
     SDL_Texture *tdoc = nullptr;
     FPSmanager fps;
 
-    bool gameOver;
+    bool gameOver = false;
     const int numPlayers = 2;
     const int numCardsPerPlayer = 7;
     const int numCardsTotal = 52;
@@ -93,6 +94,9 @@ public:
     int suitRank;
     //SDL_Rect card;
     //SDL_Rect cardScreen = {w/10, (h-h/3) - 55, 100, 125};
+    int MouseX, MouseY;
+
+
 
 };
 

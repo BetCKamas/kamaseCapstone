@@ -46,6 +46,14 @@ bool transition(string s) {
 }
 
 
+bool checkCollision(int MouseX, int MouseY, SDL_Rect a) {
+    if (a.x + a.w >= MouseX && a.x <= MouseX && a.y + a.h >= MouseY && a.y <= MouseY) {
+        return true;
+    }
+    return false;
+}
+
+
 int main(int argc, char *argv[]) {
 	  //FPSmanager fps;
     //SDL_initFramerate(&fps);

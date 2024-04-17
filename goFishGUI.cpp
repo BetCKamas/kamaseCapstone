@@ -16,6 +16,9 @@
 using namespace std;
 
 string message = " testing text location ";
+bool hasHandUpdated = false;
+bool messageUpdated = false;
+
 
 Rank goFishGUI_state::convertStringToRank(string theAsk){
   Rank result;
@@ -141,16 +144,21 @@ void goFishGUI_state::gameSetup(int numCards){
   mt19937 g(rd());
   shuffle(deck.begin(), deck.end(), g);
 
-  // deal cards //
+  // deal cards to player and comp//
   for (int i = 0; i < numCards; ++i) {
-    cout << deck.back().rank << " " << deck.back().suit << endl;
-       playerHand.push_back(deck.back());
+      cout << deck.back().rank << " " << deck.back().suit << endl;
+      playerHand.push_back(deck.back());
       deck.pop_back();
-
       computerHand.push_back(deck.back());
       deck.pop_back();
   }
+  // so computer has option to ask for cards //
+  for(int i = 0; i < computerHand.size(); i++){
+    possibleComputerAsks.push_back((computerHand.at(i)).rank);
+  }
+
   message += " after deck init ";
+  hasHandUpdated = true;
 
 }
 
@@ -171,7 +179,7 @@ void goFishGUI_state::sortCardHand(){
       } // end if
     } // end for j
   } // end for i
-
+  hasHandUpdated = true;
 }
 
 bool goFishGUI_state::checkCardInHand(int playerTurn, string cardAskedFor){
@@ -367,12 +375,10 @@ void goFishGUI_state::takeTurn(int whosTurn, bool& playerTurn, bool& computerTur
 
 }
 
-bool goFishGUI_state::checkGameOver(){
-  bool result = false;
+void goFishGUI_state::checkGameOver(){
   if( playerHand.empty() || computerHand.empty() || numCardsLeft == 0 || playerBooks >= 7 || compBooks >= 7){
-    result = true;
+    gameOver = true;
   }
-  return result;
 }
 
 goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
@@ -459,30 +465,11 @@ bool goFishGUI_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
-     SDL_RenderClear(rend);
-     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
-     SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
+     SDL_GetMouseState(&MouseX, &MouseY);
 
      // go fish code workings //
 
-    sortCardHand();
-
 /*
-
-     for(int i = 0; i < computerHand.size(); i++){
-       possibleComputerAsks.push_back((computerHand.at(i)).rank);
-     }
-
-     while(!gameOver){// while loop for game
-       while(playerTurn && !gameOver){    // while loop for player turn
-         takeTurn(deck, playerHands, player, numCardsLeft, playerBooks, compBooks, possibleComputerAsks, playerTurn, computerTurn);
-         gameOver = checkGameOver( playerHand, numCardsLeft, playerBooks, compBooks);
-       } // endl while for player turn
-       while(computerTurn && !gameOver){ // while loop for computer turn
-         takeTurn(deck, playerHands, comp, numCardsLeft, playerBooks, compBooks, possibleComputerAsks, playerTurn, computerTurn);
-         gameOver = checkGameOver(computerHand, numCardsLeft, playerBooks, compBooks);
-       }  // endl comp turn while loop
-     } // end game while loop
 
      char playAgain;
      bool restart;
@@ -510,21 +497,48 @@ bool goFishGUI_state::draw() {
      }
 */
 
+    sortCardHand();
+/*
+    while(!gameOver){// while loop for game
+      while(playerTurn && !gameOver){    // while loop for player turn
+        takeTurn(player, playerTurn, computerTurn);
+        checkGameOver();
+        sortCardHand(); // to update player hand with new card
+      } // endl while for player turn
+      while(computerTurn && !gameOver){ // while loop for computer turn
+        takeTurn(comp, playerTurn, computerTurn);
+        checkGameOver();
+        sortCardHand(); // to update player hand with computer taken cards
+      }  // endl comp turn while loop
+    } // end game while loop
+*/
+    //while(!gameOver){
+        if(hasHandUpdated || messageUpdated){
+          SDL_RenderClear(rend);
+          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+          SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
 
-     for(int i = 0; i <  playerHand.size(); i++){
-       modRank = getRankIntPos(playerHand.at(i).rank);
-       suitRank = getSuitIntPos(playerHand.at(i).suit);
-       SDL_Rect card {(modRank*CARDWIDTH), (suitRank*CARDHEIGHT), CARDWIDTH, CARDHEIGHT};
-       SDL_Rect placeOnScreen {(w/10)+(i*100), ((h-h/3) - 55), 100, 125};
-       SDL_RenderCopy(rend, tdoc, &card, &placeOnScreen); // display card image
-     } // end for
+          cardsOnScreen.clear();
+          for(int i = 0; i <  playerHand.size(); i++){
+             modRank = getRankIntPos(playerHand.at(i).rank);
+             suitRank = getSuitIntPos(playerHand.at(i).suit);
+             SDL_Rect card {(modRank*CARDWIDTH), (suitRank*CARDHEIGHT), CARDWIDTH, CARDHEIGHT};
+             SDL_Rect placeOnScreen {(w/10)+(i*100), ((h-h/3) - 55), 100, 125};
+             cardsOnScreen.push_back(placeOnScreen);
+             SDL_RenderCopy(rend, tdoc, &card, &placeOnScreen); // display card image
+          } // end for
+
+          stringColor(rend, textX, textY, message.c_str(), 0xffffffff);
+          SDL_RenderPresent(rend);
+          hasHandUpdated = false;
+          messageUpdated = false;
+        }
+      //}
 
 
+      return true;
 
-     stringColor(rend, textX, textY, message.c_str(), 0xffffffff);
 
-     SDL_RenderPresent(rend);
-     return true;
 }
 
 bool goFishGUI_state::handle_event(const SDL_Event &e) {
@@ -537,7 +551,28 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-
+      case SDL_KEYDOWN:
+          switch(e.key.keysym.sym) {
+          case SDLK_SPACE:  transition("mainArea"); result = true;   break;
+          default:  break;
+        } break;
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+  			     case SDL_BUTTON_LEFT:
+                message = "click";
+                // make rects in drawing loop add to a vector
+                // loop through checking if mouse is colliding with any of the rects
+                // display message with rank of rect being hovered over, ignore if not on a rect
+                for(int i = 0; i < cardsOnScreen.size(); i++){
+                  if(checkCollision(MouseX, MouseY, cardsOnScreen.at(i))){
+                    message += " on card";
+                    messageUpdated = true;
+                  }
+                }
+                messageUpdated = true;
+                result = true;
+                break;
+  		  } break;
     default:  break;
     }
 

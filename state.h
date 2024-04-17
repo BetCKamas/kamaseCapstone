@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 
 bool transition(std::string s);
+bool checkCollision(int MouseX, int MouseY, SDL_Rect a);
 
 class state {
 public:

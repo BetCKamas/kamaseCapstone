@@ -10,12 +10,6 @@
 
 using namespace std;
 
-bool checkCollision(int MouseX, int MouseY, SDL_Rect a) {
-    if (a.x + a.w >= MouseX && a.x <= MouseX && a.y + a.h >= MouseY && a.y <= MouseY) {
-        return true;
-    }
-    return false;
-}
 
 menu_state::menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
     /*
