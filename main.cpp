@@ -14,6 +14,7 @@
 #include "mainArea.h"
 #include "goFishGUI.h"
 #include "resultGoFish.h"
+#include "fadeToBlack.h"
 
 using namespace std;
 
@@ -23,6 +24,10 @@ const int HEIGHT = 700;
 map <string, state *>states;
 string current_state = "";
 state *current_state_ptr = nullptr;
+
+SDL_Surface* rectSurface;
+SDL_Texture* rectTexture[4];
+
 
 bool transition(string s) {
     bool result = true;
@@ -93,7 +98,7 @@ int main(int argc, char *argv[]) {
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
     states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
-    //states["loserGoFish"] = new loserGoFish_state(rend, w, s, to, font);
+    states["fadeToBlack"] = new fadeToBlack_state(rend, w, s, to, font);
     //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
 
     //transition("goFishGUI");

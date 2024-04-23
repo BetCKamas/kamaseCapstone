@@ -17,7 +17,7 @@ public:
 	  SDL_Surface *s;
     SDL_Texture *to;
     TTF_Font *font;
-    SDL_Rect imageRect;
+    SDL_Rect imageRect {42, 30, 1112, 510};
 
     int textX = 35;
     int textY = 590;
