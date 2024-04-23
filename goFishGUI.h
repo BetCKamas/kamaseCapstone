@@ -31,9 +31,9 @@ enum class Rank{
 
 enum class Suit{
   Clubs,
+  Diamonds,
   Hearts,
-  Spades,
-  Diamonds
+  Spades
 };
 
 struct Card {
@@ -58,7 +58,7 @@ public:
     bool goFish(int playerGF, string cardAskedFor);
     bool checkForBook(int playerCheckingBook, string cardAskedFor);
     void removeBookFromHand(int playerHasBook, string cardToBeRemoved);
-    void takeTurn(int whosTurn, bool& playerTurn, bool& computerTurn);
+    void takeTurn();
     void checkGameOver();
 
     vector<Card> deck;
@@ -74,6 +74,10 @@ public:
     SDL_Texture *to = nullptr;
     SDL_Surface *doc = nullptr;
     SDL_Texture *tdoc = nullptr;
+    SDL_Surface *pb = nullptr;
+    SDL_Texture *tpb = nullptr;
+    SDL_Surface *cb = nullptr;
+    SDL_Texture *tcb = nullptr;
     FPSmanager fps;
 
     bool gameOver = false;
@@ -88,17 +92,26 @@ public:
     int compBooks = 0;
     int cardAskedForLoc;
     int numCardsLeft = numCardsTotal - (numCardsPerPlayer * numPlayers);
+    string cardGotFromGoFishing;
 
     int CARDWIDTH;
     int CARDHEIGHT;
+    int PLAYERBOOKWIDTH;
+    int PLAYERBOOKHEIGHT;
+    int COMPUTERBOOKWIDTH;
+    int COMPUTERBOOKHEIGHT;
     int modRank;
     int suitRank;
-    //SDL_Rect card;
-    //SDL_Rect cardScreen = {w/10, (h-h/3) - 55, 100, 125};
     int MouseX, MouseY;
     int space = 0;
 
+    string waysToAsk[3] = {"Do you have any ", "Any ", "What about any "};
+    string goFishResponse[3] = {"None, go fish.", "Nada, go fish.", "Go fish."};
+    string bookRemarks[3] = {"Got one!", "I got a book!", "A book for me!"};
 
+    Uint32 WHITE = 0xffffffff;
+    Uint32 GREEN = 0xddbbffff;
+    Uint32 textColor;
 
 };
 

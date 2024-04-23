@@ -15,10 +15,11 @@
 
 using namespace std;
 
-string message = " testing text location ";
+string message;
 bool hasHandUpdated = false;
 bool messageUpdated = false;
-
+bool booksUpdated = false;
+bool askedForCard = false;
 
 Rank goFishGUI_state::convertStringToRank(string theAsk){
   Rank result;
@@ -124,11 +125,41 @@ int getSuitIntPos(string theCard){
   return result;
 }
 
+void goFishGUI_state::sortCardHand(){
+  Suit suitOfNextCard, suitOfCurrentCard;
+  Rank rankOfCurrentCard, rankOfNextCard ;
+
+  for(int i = 0; i <  playerHand.size(); i++){
+    for(int j = 0; j <  playerHand.size() - 1; j++){
+      rankOfCurrentCard = convertStringToRank( playerHand.at(i).rank);
+      rankOfNextCard = convertStringToRank( playerHand.at(j).rank);
+      if(static_cast<int>(rankOfCurrentCard) < static_cast<int>(rankOfNextCard)){
+        swap(playerHand.at(i),  playerHand.at(j));
+      } // end if
+    } // end for j
+  } // end for i
+
+  for(int i = 0; i <  playerHand.size(); i++){
+    for(int j = 0; j <  playerHand.size() - 1; j++){
+      suitOfCurrentCard = ConvertStringToSuit(playerHand.at(i).suit);
+      suitOfNextCard = ConvertStringToSuit(playerHand.at(j).suit);
+      rankOfCurrentCard = convertStringToRank( playerHand.at(i).rank);
+      rankOfNextCard = convertStringToRank( playerHand.at(j).rank);
+      if(static_cast<int>(suitOfCurrentCard) < static_cast<int>(suitOfNextCard)
+        && rankOfCurrentCard == rankOfNextCard){
+        swap(playerHand.at(i),  playerHand.at(j));
+      }
+    }
+  }
+
+  hasHandUpdated = true;
+}
+
 void goFishGUI_state::gameSetup(int numCards){
   // create deck //
   gameOver = false;
   Card currentCard;
-  const vector<string> ranks {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+  const vector<string> ranks {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
   const vector<string> suits {"Hearts", "Diamonds", "Clubs", "Spades"};
 
   for (auto suit : suits) {
@@ -146,7 +177,7 @@ void goFishGUI_state::gameSetup(int numCards){
 
   // deal cards to player and comp//
   for (int i = 0; i < numCards; ++i) {
-      cout << deck.back().rank << " " << deck.back().suit << endl;
+      //cout << deck.back().rank << " " << deck.back().suit << endl;
       playerHand.push_back(deck.back());
       deck.pop_back();
       computerHand.push_back(deck.back());
@@ -157,29 +188,10 @@ void goFishGUI_state::gameSetup(int numCards){
     possibleComputerAsks.push_back((computerHand.at(i)).rank);
   }
 
-  message += " after deck init ";
+  //message += " after deck init ";
+  sortCardHand();
   hasHandUpdated = true;
 
-}
-
-bool sortCardHandBySuit(const Card& lhs, const Card& rhs) {
-    Suit suitOfCurrentCard = ConvertStringToSuit(lhs.suit);
-    Suit suitOfNextCard = ConvertStringToSuit(rhs.suit);
-    return static_cast<int>(suitOfCurrentCard) < static_cast<int>(suitOfNextCard);
-}
-
-void goFishGUI_state::sortCardHand(){
-  sort(playerHand.begin(), playerHand.end(), sortCardHandBySuit);
-  for(int i = 0; i <  playerHand.size(); i++){
-    for(int j = 0; j <  playerHand.size() - 1; j++){
-      Rank rankOfCurrentCard = convertStringToRank( playerHand.at(i).rank);
-      Rank rankOfNextCard = convertStringToRank( playerHand.at(j).rank);
-      if(static_cast<int>(rankOfCurrentCard) < static_cast<int>(rankOfNextCard)){
-        swap(playerHand.at(i),  playerHand.at(j));
-      } // end if
-    } // end for j
-  } // end for i
-  hasHandUpdated = true;
 }
 
 bool goFishGUI_state::checkCardInHand(int playerTurn, string cardAskedFor){
@@ -208,19 +220,18 @@ bool goFishGUI_state::askForCard(int playerAsking, int opponent){
     for(int i = 0; i < computerHand.size(); i++){
       if(cardAskedFor == computerHand.at(i).rank){
          playerHand.push_back(computerHand.at(i));
-         cout << "Opponent has card" << endl;
          computerHand.erase(computerHand.begin() + i,  computerHand.begin() + i + 1);
-
-        result = false;
+         i--;
+         result = false;
       }
     }
   } else {
     for(int i = 0; i < playerHand.size(); i++){
       if(cardAskedFor == playerHand.at(i).rank){
          computerHand.push_back(playerHand.at(i));
-         cout << "Opponent has card" << endl;
          playerHand.erase(playerHand.begin() + i,  playerHand.begin() + i + 1);
-        result = false;
+         i--;
+         result = false;
       }
     }
   }
@@ -234,7 +245,9 @@ bool goFishGUI_state::goFish(int playerGF, string cardAskedFor){
   }
 
   if(playerGF == player){
+    cardGotFromGoFishing = deck.back().rank;
     playerHand.push_back(deck.back());
+    sortCardHand();
     deck.pop_back();
   } else{
     computerHand.push_back(deck.back());
@@ -292,93 +305,160 @@ void goFishGUI_state::removeBookFromHand(int playerHasBook, string cardToBeRemov
     }
 }
 
-void goFishGUI_state::takeTurn(int whosTurn, bool& playerTurn, bool& computerTurn){
-  fshCardMatch = false;
-  gofsh = false;
-  haveCard = false;
-  string cardAskedFor;
+void goFishGUI_state::takeTurn(){
+
   int opponent, cardAskedForLoc;
 
-  if(whosTurn == player){
-    opponent = comp;
-    cout << "Card rank being asked for: ";
-    cin >> cardAskedFor;
+  if(playerTurn && !gameOver){
+      fshCardMatch = false;
+      gofsh = false;
+      haveCard = false;
+      opponent = comp;
 
-    haveCard = checkCardInHand(player, cardAskedFor);
+      gofsh = askForCard(player, opponent);
+      sortCardHand();
 
-    if(!haveCard){
-      cout << "Must have card being asked for, try again" << endl;
-      cout << "Card rank being asked for: ";
-      cin >> cardAskedFor;
-      haveCard = checkCardInHand(player, cardAskedFor);
-    }
-  } else {
-    opponent = player;
-    cardAskedForLoc = rand() % computerHand.size();
-    haveCard = checkCardInHand(comp, computerHand.at(cardAskedForLoc).rank);
-    cardAskedFor = computerHand.at(cardAskedForLoc).rank;
-    cout << "computer asks for " << cardAskedFor << endl;
+      if(gofsh){
+        message = goFishResponse[rand()%3];
+        textColor = GREEN;
+        messageUpdated = true;
+        draw();
+        SDL_Delay(1500);
+        fshCardMatch = goFish(player, cardAskedFor);
+        if(!fshCardMatch){
+          playerTurn = false;
+          computerTurn = true;
+        } else {
+          message = "Got a match!";
+          messageUpdated = true;
+          textColor = WHITE;
+          draw();
+          SDL_Delay(1500);
+        }
+      } else {
+        message = "Here you go.";
+        textColor = GREEN;
+        draw();
+        SDL_Delay(1500);
+
+        if(checkForBook(player, cardAskedFor)){
+            removeBookFromHand(player, cardAskedFor);
+             message = bookRemarks[rand()%3];
+             messageUpdated = true;
+             textColor = WHITE;
+             draw();
+             SDL_Delay(1500);
+        }
+      }
+
+      if(checkForBook(player, cardGotFromGoFishing)){
+          removeBookFromHand(player, cardGotFromGoFishing);
+          message = bookRemarks[rand()%3];
+          textColor = WHITE;
+          messageUpdated = true;
+          draw();
+          SDL_Delay(1500);
+      }
+
+      if(rand() % 100 > 25){ // for computer ai, will remember the card being asked for 75% of the time
+        possibleComputerAsks.push_back(cardAskedFor);
+      }
+
+      // case if player or computer hand is empty but the go fish pile isn't empty
+      if(playerHand.empty() && numCardsLeft > 0){
+        playerHand.push_back(deck.back());
+        deck.pop_back();
+        numCardsLeft--;
+        hasHandUpdated = true;
+        sortCardHand();
+        draw();
+        SDL_Delay(1500);
+      }
+
+      checkGameOver();
+
   }
+  while(computerTurn && !gameOver){
+      fshCardMatch = false;
+      gofsh = false;
+      haveCard = false;
+      opponent = player;
+      cardAskedForLoc = rand() % computerHand.size();
+      haveCard = checkCardInHand(comp, computerHand.at(cardAskedForLoc).rank);
+      cardAskedFor = computerHand.at(cardAskedForLoc).rank;
+      message =  waysToAsk[rand() % 3];
+      message += cardAskedFor;
+      message += "'s?";
+      messageUpdated = true;
+      textColor = GREEN;
+      draw();
+      SDL_Delay(1500);
 
-  gofsh = askForCard(whosTurn, opponent);
+      gofsh = askForCard(comp, opponent);
 
-  if(checkForBook(player, cardAskedFor) && whosTurn == player){
-      removeBookFromHand(player, cardAskedFor);
-      cout << "Player got a book" << endl;
-  } else if(checkForBook(comp, cardAskedFor) && whosTurn == comp){
-        removeBookFromHand(comp, cardAskedFor);
-        cout << "computer got a book" << endl;
-  }
+      if(gofsh){
+        message = goFishResponse[rand()%3];
+        messageUpdated = true;
+        textColor = WHITE;
+        draw();
+        SDL_Delay(1500);
+        fshCardMatch = goFish(comp, cardAskedFor);
+        if (!fshCardMatch){
+            playerTurn = true;
+            computerTurn = false;
+        } else {
+          message = "Got a match!";
+          messageUpdated = true;
+          textColor = GREEN;
+          draw();
+          SDL_Delay(1500);
+        }
+      } else {
+        textColor = WHITE;
+        message = "Here you go.";
+        messageUpdated = true;
+        draw();
+        SDL_Delay(1500);
 
-  if(gofsh){
-    cout << "Go Fish" << endl;
-    fshCardMatch = goFish(whosTurn, cardAskedFor);
-    if(!fshCardMatch && whosTurn == player){
-      cout << "Did not draw matching card" << endl;
-      playerTurn = false;
-      computerTurn = true;
-    } else if (!fshCardMatch && whosTurn == comp){
-        cout << "Did not draw matching card" << endl;
-        playerTurn = true;
-        computerTurn = false;
-    } else {
-      cout << "Drew matching card, go again" << endl;
-    }
-  }
+        if(checkForBook(comp, cardAskedFor)){
+              removeBookFromHand(comp, cardAskedFor);
+              message = bookRemarks[rand()%3];
+              messageUpdated = true;
+              textColor = GREEN;
+              draw();
+              SDL_Delay(1500);
+        }
+      }
 
-  if(checkForBook(whosTurn, playerHand.back().rank) && whosTurn == player){
-      removeBookFromHand(whosTurn, playerHand.back().rank);
-      cout << "Player got a book" << endl;
-  } else if(checkForBook(whosTurn, computerHand.back().rank) && whosTurn == comp){
-        removeBookFromHand(whosTurn, computerHand.back().rank);
-        cout << "computer got a book" << endl;
-  }
+      if(checkForBook(comp, computerHand.back().rank)){
+          removeBookFromHand(comp, computerHand.back().rank);
+          message = bookRemarks[rand()%3];
+          messageUpdated = true;
+          textColor = GREEN;
+          draw();
+          SDL_Delay(1500);
+      }
 
-  sortCardHand();
+      if(computerHand.empty() && numCardsLeft > 0){
+        computerHand.push_back(deck.back());
+        deck.pop_back();
+        numCardsLeft--;
+      }
 
-  if(rand() % 100 > 25 && whosTurn == player){ // for computer ai, will remember the card being asked for 75% of the time
-    possibleComputerAsks.push_back(cardAskedFor);
-  }
+      checkGameOver();
 
-  // case if player or computer hand is empty but the go fish pile isn't empty
-  if(playerHand.empty() && numCardsLeft > 0){
-    playerHand.push_back(deck.back());
-    deck.pop_back();
-    numCardsLeft--;
-  }
-
-  if(computerHand.empty() && numCardsLeft > 0){
-    computerHand.push_back(deck.back());
-    deck.pop_back();
-    numCardsLeft--;
   }
 
 }
 
 void goFishGUI_state::checkGameOver(){
   if( playerHand.empty() || computerHand.empty() || numCardsLeft == 0 || playerBooks >= 7 || compBooks >= 7){
+    message = "game over";
+    messageUpdated = true;
+    draw();
     gameOver = true;
   }
+
 }
 
 goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
@@ -401,15 +481,25 @@ goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surfac
      o = nullptr;
 
      doc = IMG_Load("Deckofcards.png");
-
-     //card.x = 0;
-     //card.y = 0;
      CARDWIDTH = doc->w / 13;
      CARDHEIGHT = doc->h / 4;
-
      tdoc = SDL_CreateTextureFromSurface(rend, doc);
      SDL_FreeSurface(doc);
      doc = nullptr;
+
+     pb = IMG_Load("playerBooks.png");
+     PLAYERBOOKWIDTH = pb->w / 7;
+     PLAYERBOOKHEIGHT = pb->h;
+     tpb = SDL_CreateTextureFromSurface(rend, pb);
+     SDL_FreeSurface(pb);
+     pb = nullptr;
+
+     cb = IMG_Load("computerBooks.png");
+     COMPUTERBOOKWIDTH = cb->w / 7;
+     COMPUTERBOOKHEIGHT = cb->h;
+     tcb = SDL_CreateTextureFromSurface(rend, cb);
+     SDL_FreeSurface(cb);
+     cb = nullptr;
 }
 
 goFishGUI_state::~goFishGUI_state() {
@@ -432,6 +522,12 @@ goFishGUI_state::~goFishGUI_state() {
 
      SDL_DestroyTexture(tdoc);
      tdoc = nullptr;
+
+     SDL_DestroyTexture(tpb);
+     tpb = nullptr;
+
+     SDL_DestroyTexture(tcb);
+     tcb = nullptr;
 
      IMG_Quit();
 }
@@ -465,58 +561,97 @@ bool goFishGUI_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
-     SDL_GetMouseState(&MouseX, &MouseY);
-
-     // go fish code workings //
-
-/*
-
-     char playAgain;
-     bool restart;
-
-     if(compBooks < playerBooks){
-       cout << "Player wins! Go again? Y/N" << endl;
-     } else if (playerBooks < compBooks){
-       cout << "Computer wins! try again? Y/N" << endl;
-     } else {
-       cout << "its a draw, try again? Y/N" << endl;
-     }
-     cin >> playAgain;
-
-     switch(playAgain){
-       case 'N':
-       case 'n':
-         restart = false;
-         break;
-       case 'Y':
-       case 'y':
-         restart = true;
-         break;
-       default:
-         cout << "Not understood try again";
-     }
-*/
-
-    sortCardHand();
-/*
-    while(!gameOver){// while loop for game
-      while(playerTurn && !gameOver){    // while loop for player turn
-        takeTurn(player, playerTurn, computerTurn);
-        checkGameOver();
-        sortCardHand(); // to update player hand with new card
-      } // endl while for player turn
-      while(computerTurn && !gameOver){ // while loop for computer turn
-        takeTurn(comp, playerTurn, computerTurn);
-        checkGameOver();
-        sortCardHand(); // to update player hand with computer taken cards
-      }  // endl comp turn while loop
-    } // end game while loop
-*/
-    //while(!gameOver){
-        if(hasHandUpdated || messageUpdated){
+      SDL_GetMouseState(&MouseX, &MouseY);
+      if(!gameOver){
+        if(hasHandUpdated || messageUpdated || booksUpdated){
           SDL_RenderClear(rend);
           SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
           SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
+
+          SDL_Rect playerBooksScreen {0, 0, PLAYERBOOKWIDTH, PLAYERBOOKHEIGHT}; // the rect showing the books
+          SDL_Rect playerBooksShown {imageRect.x+145, imageRect.y+325, 0, PLAYERBOOKHEIGHT}; // the rect position being displayed on screen
+
+          switch(playerBooks){
+            case 7:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*7;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*7;
+                break;
+            case 6:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*6;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*6;
+                break;
+            case 5:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*5;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*5;
+                break;
+            case 4:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*4;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*4;
+                break;
+            case 3:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*3;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*3;
+                break;
+            case 2:
+                playerBooksShown.w =  PLAYERBOOKWIDTH*2;
+                playerBooksScreen.w =  PLAYERBOOKWIDTH*2;
+                break;
+            case 1:
+                playerBooksShown.w =  PLAYERBOOKWIDTH;
+                break;
+            default: break;
+          }
+
+          SDL_RenderCopy(rend, tpb, &playerBooksScreen, &playerBooksShown);
+
+          SDL_Rect computerBooksScreen {COMPUTERBOOKWIDTH*6, 0, COMPUTERBOOKWIDTH, COMPUTERBOOKHEIGHT}; // the rect showing the books
+          SDL_Rect computerBooksShown {imageRect.x+816, imageRect.y+25, 0, COMPUTERBOOKHEIGHT}; // the rect position being displayed on screen
+
+          switch(compBooks){
+            case 7:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*7;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*7;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH*6);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH*6);
+                break;
+            case 6:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*6;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*6;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH*5);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH*5);
+                break;
+            case 5:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*5;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*5;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH*4);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH*4);
+                break;
+            case 4:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*4;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*4;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH*3);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH*3);
+                break;
+            case 3:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*3;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*3;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH*2);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH*2);
+                break;
+            case 2:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH*2;
+                computerBooksScreen.w =  COMPUTERBOOKWIDTH*2;
+                computerBooksShown.x = computerBooksShown.x - (COMPUTERBOOKWIDTH);
+                computerBooksScreen.x =  computerBooksScreen.x - (COMPUTERBOOKWIDTH);
+                break;
+            case 1:
+                computerBooksShown.w =  COMPUTERBOOKWIDTH;
+                break;
+            default: break;
+          }
+
+          SDL_RenderCopy(rend, tcb, &computerBooksScreen, &computerBooksShown);
+
 
           cardsOnScreen.clear();
           for(int i = 0; i <  playerHand.size(); i++){
@@ -524,12 +659,12 @@ bool goFishGUI_state::draw() {
              suitRank = getSuitIntPos(playerHand.at(i).suit);
              if(i > 0){
                if(playerHand.at(i).rank == playerHand.at(i-1).rank){
-                 space = (cardsOnScreen.at(i-1).x) + 40;
+                 space = (cardsOnScreen.at(i-1).x) + 25;
                } else {
-                 space += 100;
+                 space += 80;
                }
              } else {
-               space = (w/10);
+               space = (w/10) - 25;
              }
              SDL_Rect card {(modRank*CARDWIDTH), (suitRank*CARDHEIGHT), CARDWIDTH, CARDHEIGHT};
              SDL_Rect placeOnScreen {space, ((h-h/3) - 55), 100, 125};
@@ -538,16 +673,14 @@ bool goFishGUI_state::draw() {
              SDL_RenderCopy(rend, tdoc, &card, &placeOnScreen); // display card image
           } // end for
 
-          stringColor(rend, textX, textY, message.c_str(), 0xffffffff);
+          stringColor(rend, textX, textY, message.c_str(), textColor);
           SDL_RenderPresent(rend);
           hasHandUpdated = false;
           messageUpdated = false;
         }
-      //}
-
+      }
 
       return true;
-
 
 }
 
@@ -569,18 +702,29 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
   			     case SDL_BUTTON_LEFT:
-                message = "click";
                 // make rects in drawing loop add to a vector
                 // loop through checking if mouse is colliding with any of the rects
                 // display message with rank of rect being hovered over, ignore if not on a rect
                 for(int i = 0; i < cardsOnScreen.size(); i++){
                   if(checkCollision(MouseX, MouseY, cardsOnScreen.at(i))){
-                    message += " on card ";
-                    message += cardRanksOnScreen[i];
-                    messageUpdated = true;
+                    cardAskedFor = cardRanksOnScreen[i];
+                    cardAskedForLoc = i;
+                    askedForCard = true;
+                    playerTurn = true;
                   }
                 }
-                messageUpdated = true;
+                if(askedForCard){
+                  message = waysToAsk[rand() % 3];
+                  message += cardRanksOnScreen[cardAskedForLoc];
+                  message += "'s?";
+                  messageUpdated = true;
+                  textColor = WHITE;
+                  draw();
+                  SDL_Delay(1500);
+                  takeTurn();
+                  askedForCard = false;
+                }
+                checkGameOver();
                 result = true;
                 break;
   		  } break;
