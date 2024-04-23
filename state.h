@@ -26,6 +26,10 @@ public:
     int h;
 
     int winnerGoFish;
+    std::string message;
+    Uint32 WHITE = 0xffffffff;
+    Uint32 GREEN = 0xddbbffff;
+    Uint32 textColor;
 
 
     state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
