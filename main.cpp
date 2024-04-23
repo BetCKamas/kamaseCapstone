@@ -40,6 +40,12 @@ bool transition(string s) {
     while(SDL_PollEvent(&e)); // flush the event queue
 
     if(states.contains(s)) {
+/*
+        string ftb = "fadeToBlack";
+        current_state_ptr = states[ftb];
+        current_state = s;
+        current_state_ptr->draw();
+*/
         current_state_ptr = states[s];
         current_state = s;
         current_state_ptr->enter();

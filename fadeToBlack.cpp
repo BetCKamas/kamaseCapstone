@@ -50,18 +50,17 @@ bool fadeToBlack_state::draw() {
 
 
      for(int i = 0; i < 4; i++){
+       cout << "alpha" << endl;
          Uint8 a =  Uint8(min(255, (64*i)));
-         SDL_FillRect(rectSurface, &rect, SDL_MapRGBA(rectSurface->format, 32, 0, 0, a));
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
          rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
-         SDL_SetTextureBlendMode(rectTexture[i], SDL_BLENDMODE_BLEND);
          SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
          SDL_RenderPresent(rend);
          SDL_Delay(1000);
          SDL_SetTextureBlendMode(rectTexture[i], SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
-
-     leave();
 
      return true;
 }

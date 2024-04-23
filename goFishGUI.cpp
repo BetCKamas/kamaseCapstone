@@ -536,6 +536,7 @@ bool goFishGUI_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
+    states["fadeToBlack"]->draw(); 
     gameSetup(7);
     return true;
 }
