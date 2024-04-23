@@ -109,7 +109,6 @@ public:
 
     Uint32 WHITE = 0xffffffff;
     Uint32 GREEN = 0xddbbffff;
-    Uint32 textColor;
 
 };
 

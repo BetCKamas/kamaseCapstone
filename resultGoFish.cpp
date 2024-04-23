@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include <SDL.h>
+#include <SDL2_gfxPrimitives.h>
 
 #include "resultGoFish.h"
 #include "state.h"
@@ -45,39 +46,28 @@ bool resultGoFish_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
+     SDL_RenderClear(rend);
+     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+
      switch(winnerGoFish){
        case 0: // case player wins
-         SDL_RenderClear(rend);
-         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_SetRenderDrawColor(rend, (Uint8)~0xFF, (Uint8)~0xA5, (Uint8)~0x00, 0xFF);
-         SDL_RenderFillRect(rend, &imageRect);
-         message = "You have won. I will turn the lights back on."
-         stringColor(rend, textX, textY, message.c_str(), textColor);
-         SDL_RenderPresent(rend);
+         message = "You have won. I will turn the lights back on.";
          break;
        case 1: // case computer wins
-         SDL_RenderClear(rend);
-         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_SetRenderDrawColor(rend, (Uint8)~0xFF, (Uint8)~0xA5, (Uint8)~0x00, 0xFF);
-         SDL_RenderFillRect(rend, &imageRect);
-         message = "You have lost. The lights stay off until you beat me. Are you ready to try again?"
-         stringColor(rend, textX, textY, message.c_str(), textColor);
-         SDL_RenderPresent(rend);
+         message = "You have lost. The lights stay off until you beat me. Are you ready to try again?";
          break;
        case 2: // tied
-         SDL_RenderClear(rend);
-         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_SetRenderDrawColor(rend, (Uint8)~0x00, (Uint8)~0x00, (Uint8)~0xFF, 0xFF);
-         SDL_RenderFillRect(rend, &imageRect);
-         message = "We have tied. So close, but no cigar. Are you ready to try again?"
-         stringColor(rend, textX, textY, message.c_str(), textColor);
-         SDL_RenderPresent(rend);
+         message = "We have tied. So close, but no cigar. Are you ready to try again?";
          break;
        default: break;
      }
 
-
-
+     SDL_RenderFillRect(rend, &imageRect);
+     stringColor(rend, textX, textY, message.c_str(), textColor);
+     SDL_RenderPresent(rend);
 
      return true;
 }

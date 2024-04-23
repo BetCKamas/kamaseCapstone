@@ -13,9 +13,8 @@
 #include "credits.h"
 #include "mainArea.h"
 #include "goFishGUI.h"
-#include "winnerGoFish.h"
-#include "loserGoFish.h"
-#include "tiedGoFish.h"
+#include "resultGoFish.h"
+
 
 using namespace std;
 
@@ -79,7 +78,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    w = SDL_CreateWindow("mothman game", SDL_WINDOWPOS_CENTERED,
+    w = SDL_CreateWindow("Mothman P.I.", SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *rend = SDL_CreateRenderer(w, -1, 0);
 
@@ -94,7 +93,7 @@ int main(int argc, char *argv[]) {
     states["credits"] = new credits_state(rend, w, s, to, font);
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
-    states["resultGoFish"] = new winnerGoFish_state(rend, w, s, to, font);
+    states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
     //states["loserGoFish"] = new loserGoFish_state(rend, w, s, to, font);
     //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
 
