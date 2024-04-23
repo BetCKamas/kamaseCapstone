@@ -13,7 +13,7 @@ fadeToBlack_state::fadeToBlack_state(SDL_Renderer *rend, SDL_Window *win, SDL_Su
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
      */
-    rectSurface = SDL_CreateRGBSurface(0, imageRect.w, imageRect.h, 32, 0, 0, 0, 0);
+    rectSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
 }
 
 fadeToBlack_state::~fadeToBlack_state() {
@@ -23,7 +23,8 @@ fadeToBlack_state::~fadeToBlack_state() {
      * managed by this state.  Only happens once.
      */
 
-
+     SDL_FreeSurface(rectSurface);
+     rectSurface = nullptr;
 }
 
 bool fadeToBlack_state::enter() {
@@ -49,16 +50,17 @@ bool fadeToBlack_state::draw() {
      */
 
 
-     for(int i = 0; i < 4; i++){
+     for(int i = 1; i <= 4; i++){
        cout << "alpha" << endl;
          Uint8 a =  Uint8(min(255, (64*i)));
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_SetSurfaceAlphaMod(rectSurface, a);
          SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
          rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
          SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
          SDL_RenderPresent(rend);
-         SDL_Delay(1000);
-         SDL_SetTextureBlendMode(rectTexture[i], SDL_BLENDMODE_NONE);
+         SDL_Delay(500);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
 
