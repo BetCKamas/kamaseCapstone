@@ -5,12 +5,17 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL2_gfxPrimitives.h>
+#include <SDL_image.h>
 
 #include "state.h"
 #include "menu.h"
 #include "credits.h"
 #include "mainArea.h"
 #include "goFishGUI.h"
+#include "winnerGoFish.h"
+#include "loserGoFish.h"
+#include "tiedGoFish.h"
 
 using namespace std;
 
@@ -78,13 +83,23 @@ int main(int argc, char *argv[]) {
             SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer *rend = SDL_CreateRenderer(w, -1, 0);
 
-    states["menu"] = new menu_state(rend, w, s, font);
-    states["credits"] = new credits_state(rend, w, s, font);
-    states["mainArea"] = new mainArea_state(rend, w, s, font);
-    states["goFishGUI"] = new goFishGUI_state(rend, w, s, font);
 
-    transition("goFishGUI");
-    //transition("menu");
+    SDL_Surface *o = IMG_Load("Overlay.png");
+    SDL_Texture *to = SDL_CreateTextureFromSurface(rend, o);
+    SDL_FreeSurface(o);
+    o = nullptr;
+
+
+    states["menu"] = new menu_state(rend, w, s, to, font);
+    states["credits"] = new credits_state(rend, w, s, to, font);
+    states["mainArea"] = new mainArea_state(rend, w, s, to, font);
+    states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
+    states["resultGoFish"] = new winnerGoFish_state(rend, w, s, to, font);
+    //states["loserGoFish"] = new loserGoFish_state(rend, w, s, to, font);
+    //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
+
+    //transition("goFishGUI");
+    transition("menu");
 
     SDL_Event e;
     bool quit = false;
@@ -113,8 +128,13 @@ int main(int argc, char *argv[]) {
         current_state_ptr->draw();
     }
 
+    SDL_DestroyTexture(to);
+    to = nullptr;
+
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(w);
+
+    IMG_Quit();
 
     SDL_Quit();
 

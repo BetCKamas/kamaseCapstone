@@ -11,7 +11,7 @@ using namespace std;
 
 class menu_state : public state {
 public:
-    menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font);
+    menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
     ~menu_state();
     bool enter();
     bool leave();

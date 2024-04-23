@@ -15,16 +15,20 @@ public:
     SDL_Renderer *rend;
 	  SDL_Window *win;
 	  SDL_Surface *s;
+    SDL_Texture *to;
     TTF_Font *font;
     SDL_Rect imageRect;
+
     int textX = 35;
     int textY = 590;
 
     int w;
     int h;
 
+    int winnerGoFish;
 
-    state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font);
+
+    state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
     ~state();
 
     virtual bool enter() = 0;

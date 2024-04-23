@@ -10,7 +10,7 @@ using namespace std;
 
 class mainArea_state : public state {
 public:
-    mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font);
+    mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
     ~mainArea_state();
     bool enter();
     bool leave();

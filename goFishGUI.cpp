@@ -457,11 +457,19 @@ void goFishGUI_state::checkGameOver(){
     messageUpdated = true;
     draw();
     gameOver = true;
+    if(playerBooks > compBooks){
+      winnerGoFish = 0;
+    } else if(playerBooks < compBooks){
+      winnerGoFish = 1;
+    } else {
+      winnerGoFish = 2;
+    }
+    transition("resultGoFish");
   }
 
 }
 
-goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
+goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
@@ -474,11 +482,6 @@ goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surfac
      tgt = SDL_CreateTextureFromSurface(rend, gt);
      SDL_FreeSurface(gt);
      gt = nullptr;
-
-     o = IMG_Load("Overlay.png");
-     to = SDL_CreateTextureFromSurface(rend, o);
-     SDL_FreeSurface(o);
-     o = nullptr;
 
      doc = IMG_Load("Deckofcards.png");
      CARDWIDTH = doc->w / 13;
@@ -516,9 +519,6 @@ goFishGUI_state::~goFishGUI_state() {
 
      SDL_DestroyTexture(tgt);
      tgt = nullptr;
-
-     SDL_DestroyTexture(to);
-     to = nullptr;
 
      SDL_DestroyTexture(tdoc);
      tdoc = nullptr;
@@ -730,6 +730,8 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
   		  } break;
     default:  break;
     }
+
+    SDL_FlushEvents(SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONDOWN + 1);
 
     return result;
 }

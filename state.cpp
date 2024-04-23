@@ -3,10 +3,11 @@
 
 #include "state.h"
 
-state::state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) {
+state::state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) {
     this->rend = rend;
     this->win = win;
     this->s = s;
+    this->to = to;
     this->font = font;
     SDL_GetRendererOutputSize(rend, &w, &h);
 

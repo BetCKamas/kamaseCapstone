@@ -43,7 +43,7 @@ struct Card {
 
 class goFishGUI_state : public state {
 public:
-    goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font);
+    goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
     ~goFishGUI_state();
     bool enter();
     bool leave();
@@ -70,8 +70,6 @@ public:
 
     SDL_Surface *gt = nullptr;
     SDL_Texture *tgt = nullptr;
-    SDL_Surface *o = nullptr;
-    SDL_Texture *to = nullptr;
     SDL_Surface *doc = nullptr;
     SDL_Texture *tdoc = nullptr;
     SDL_Surface *pb = nullptr;

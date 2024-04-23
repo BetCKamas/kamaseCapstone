@@ -11,7 +11,7 @@
 using namespace std;
 
 
-menu_state::menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
+menu_state::menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
@@ -55,6 +55,7 @@ menu_state::menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_
     tts = SDL_CreateTextureFromSurface(rend, ts);
     SDL_FreeSurface(ts);
     ts = nullptr;
+
 }
 
 menu_state::~menu_state() {
@@ -159,7 +160,7 @@ bool menu_state::handle_event(const SDL_Event &e) {
                   transition("credits"); result = true;; break;
                 }
                 if(pHover){
-                  transition("mainArea"); result = true;; break;
+                  transition("goFishGUI"); result = true;; break;
                 }
   		  } break;
 

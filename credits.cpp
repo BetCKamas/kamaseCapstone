@@ -9,7 +9,7 @@
 
 using namespace std;
 
-credits_state::credits_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, TTF_Font *font) : state(rend, win, s, font) {
+credits_state::credits_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
