@@ -88,7 +88,6 @@ int main(int argc, char *argv[]) {
     SDL_FreeSurface(o);
     o = nullptr;
 
-
     states["menu"] = new menu_state(rend, w, s, to, font);
     states["credits"] = new credits_state(rend, w, s, to, font);
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
@@ -109,7 +108,9 @@ int main(int argc, char *argv[]) {
         /*
          * Let event handling update variables needed for drawing
          */
-        while(SDL_PollEvent(&e)) {
+
+        // for custom mouse
+         while(SDL_PollEvent(&e)) {
             if(!current_state_ptr || !current_state_ptr->handle_event(e)) {
                 switch(e.type) {
                 case SDL_QUIT:  quit = true;  break;
@@ -127,7 +128,9 @@ int main(int argc, char *argv[]) {
          * Draw everything that matters
          */
         //SDL_SetRenderDrawColor(rend, 0xDD, 0xBB, 0xFF, 0xFF);
+
         current_state_ptr->draw();
+
     }
 
     SDL_DestroyTexture(to);
