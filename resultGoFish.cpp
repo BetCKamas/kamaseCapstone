@@ -14,6 +14,11 @@ resultGoFish_state::resultGoFish_state(SDL_Renderer *rend, SDL_Window *win, SDL_
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
      */
+
+     rgf = IMG_Load("./gameImages/Resultgf.png");
+     trgf = SDL_CreateTextureFromSurface(rend, rgf);
+     SDL_FreeSurface(rgf);
+     rgf = nullptr;
 }
 
 resultGoFish_state::~resultGoFish_state() {
@@ -22,6 +27,9 @@ resultGoFish_state::~resultGoFish_state() {
      * get rid of any dynamically allocated or loaded resources
      * managed by this state.  Only happens once.
      */
+
+     SDL_DestroyTexture(trgf);
+     trgf = nullptr;
 }
 
 bool resultGoFish_state::enter() {
@@ -32,7 +40,7 @@ bool resultGoFish_state::enter() {
          //cout << "alpha" << endl;
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
-         //SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
+         SDL_RenderCopy(rend, trgf, nullptr, &imageRect); // display game image
          Uint8 a =  Uint8(i*2);
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
          SDL_SetSurfaceAlphaMod(rectSurface, a);

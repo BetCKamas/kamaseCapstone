@@ -16,6 +16,9 @@ public:
     bool leave();
     bool draw();
     bool handle_event(const SDL_Event &e);
+
+    SDL_Surface *rgf;
+    SDL_Texture *trgf;
 };
 
 #endif  /* __RESULTGOFISH_H__ */

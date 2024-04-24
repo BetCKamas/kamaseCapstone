@@ -15,6 +15,14 @@
 #include "pathToWoods.h"
 #include "goFishGUI.h"
 #include "resultGoFish.h"
+#include "bigfoot.h"
+#include "goatman.h"
+#include "indiner.h"
+#include "maze.h"
+#include "mines.h"
+#include "mothmanHome.h"
+#include "woods.h"
+
 
 using namespace std;
 
@@ -96,8 +104,13 @@ int main(int argc, char *argv[]) {
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
     states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
     states["pathToWoods"] = new pathToWoods_state(rend, w, s, to, font);
-    //states["fadeFromBlack"] = new fadeFromBlack_state(rend, w, s, to, font);
-    //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
+    states["bigfoot"] = new bigfoot_state(rend, w, s, to, font);
+    states["goatman"] = new goatman_state(rend, w, s, to, font);
+    states["indiner"] = new indiner_state(rend, w, s, to, font);
+    states["maze"] = new maze_state(rend, w, s, to, font);
+    states["mines"] = new mines_state(rend, w, s, to, font);
+    states["mothmanHome"] = new mothmanHome_state(rend, w, s, to, font);
+    states["woods"] = new woods_state(rend, w, s, to, font);
 
     //transition("goFishGUI");
     //transition("menu");
