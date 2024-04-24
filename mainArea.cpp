@@ -22,10 +22,6 @@ mainArea_state::mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface 
     SDL_FreeSurface(ma);
     ma = nullptr;
 
-    o = IMG_Load("Overlay.png");
-    to = SDL_CreateTextureFromSurface(rend, o);
-    SDL_FreeSurface(o);
-    o = nullptr;
 }
 
 mainArea_state::~mainArea_state() {
@@ -38,8 +34,6 @@ mainArea_state::~mainArea_state() {
     SDL_DestroyTexture(tma);
     tma = nullptr;
 
-    SDL_DestroyTexture(to);
-    to = nullptr;
 
     IMG_Quit();
 }
@@ -48,14 +42,45 @@ bool mainArea_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
-    return true;
+     for(int i = 67; i > 0; i--){
+         //cout << "alpha" << endl;
+         SDL_RenderClear(rend);
+         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+         SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
+         Uint8 a =  Uint8(i*2);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_SetSurfaceAlphaMod(rectSurface, a);
+         SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+         rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+         SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+         SDL_RenderPresent(rend);
+         SDL_Delay(5);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+         SDL_DestroyTexture(rectTexture[i]);
+     }
+     return true;
 }
 
 bool mainArea_state::leave() {
     /*
      * Called whenever we are transitioning out of this state.
      */
-    return true;
+
+     for(int i = 0; i < 67; i++){
+         //cout << "alpha" << endl;
+         Uint8 a =  Uint8(i*2);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_SetSurfaceAlphaMod(rectSurface, a);
+         SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+         rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+         SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+         SDL_RenderPresent(rend);
+         SDL_Delay(5);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+         SDL_DestroyTexture(rectTexture[i]);
+     }
+
+     return true;
 }
 
 bool mainArea_state::draw() {
@@ -65,6 +90,7 @@ bool mainArea_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
+
      SDL_RenderClear(rend);
      SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
      SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
@@ -85,7 +111,11 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-
+      case SDL_KEYDOWN:
+          switch(e.key.keysym.sym) {
+          case SDLK_SPACE:  transition("goFishGUI"); result = true;   break;
+          default:  break;
+        } break;
     default:  break;
     }
 

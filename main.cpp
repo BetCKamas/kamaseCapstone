@@ -14,20 +14,16 @@
 #include "mainArea.h"
 #include "goFishGUI.h"
 #include "resultGoFish.h"
-#include "fadeToBlack.h"
 
 using namespace std;
 
 const int WIDTH = 1200;
 const int HEIGHT = 700;
+char winnerGoFish;
 
 map <string, state *>states;
 string current_state = "";
 state *current_state_ptr = nullptr;
-
-SDL_Surface* rectSurface;
-SDL_Texture* rectTexture[4];
-
 
 bool transition(string s) {
     bool result = true;
@@ -40,12 +36,6 @@ bool transition(string s) {
     while(SDL_PollEvent(&e)); // flush the event queue
 
     if(states.contains(s)) {
-/*
-        string ftb = "fadeToBlack";
-        current_state_ptr = states[ftb];
-        current_state = s;
-        current_state_ptr->draw();
-*/
         current_state_ptr = states[s];
         current_state = s;
         current_state_ptr->enter();
@@ -104,11 +94,14 @@ int main(int argc, char *argv[]) {
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
     states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
-    states["fadeToBlack"] = new fadeToBlack_state(rend, w, s, to, font);
+    //states["fadeToBlack"] = new fadeToBlack_state(rend, w, s, to, font);
+    //states["fadeFromBlack"] = new fadeFromBlack_state(rend, w, s, to, font);
     //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
 
-    //transition("goFishGUI");
-    transition("menu");
+    transition("goFishGUI");
+    //transition("menu");
+    //transition("mainArea");
+    //transition("resultGoFish");
 
     SDL_Event e;
     bool quit = false;

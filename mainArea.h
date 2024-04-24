@@ -19,9 +19,6 @@ public:
 
     SDL_Surface *ma = nullptr;
     SDL_Texture *tma = nullptr;
-    SDL_Surface *o = nullptr;
-    SDL_Texture *to = nullptr;
-
 
 };
 

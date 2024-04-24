@@ -19,16 +19,20 @@ public:
     TTF_Font *font;
     SDL_Rect imageRect {42, 30, 1112, 510};
 
+    SDL_Surface* rectSurface;
+    SDL_Texture* rectTexture[67];
+    SDL_Rect rect = imageRect;
+
     int textX = 35;
     int textY = 590;
 
     int w;
     int h;
 
-    int winnerGoFish;
+
     std::string message;
-    Uint32 WHITE = 0xffffffff;
-    Uint32 GREEN = 0xddbbffff;
+    const Uint32 WHITE = 0xffffffff;
+    const Uint32 GREEN = 0xddbbffff;
     Uint32 textColor;
 
 
@@ -42,6 +46,7 @@ public:
 };
 
 extern std::map <std::string, state *>states;
+extern char winnerGoFish;
 
 
 #endif  /* __STATE_H__ */
