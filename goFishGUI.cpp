@@ -342,7 +342,7 @@ void goFishGUI_state::takeTurn(){
         SDL_Delay(1500);
 
         if(checkForBook(player, cardAskedFor)){
-            removeBookFromHand(player, cardAskedFor);
+             removeBookFromHand(player, cardAskedFor);
              message = bookRemarks[rand()%3];
              messageUpdated = true;
              textColor = WHITE;
@@ -453,17 +453,18 @@ void goFishGUI_state::takeTurn(){
 
 void goFishGUI_state::checkGameOver(){
   if( playerHand.empty() || computerHand.empty() || numCardsLeft == 0 || playerBooks >= 7 || compBooks >= 7){
-    message = "game over";
-    messageUpdated = true;
+    //message = "game over";
+    //messageUpdated = true;
     draw();
     gameOver = true;
     if(playerBooks > compBooks){
-      winnerGoFish = 0;
+      winnerGoFish = 'p';
     } else if(playerBooks < compBooks){
-      winnerGoFish = 1;
+      winnerGoFish = 'c';
     } else {
-      winnerGoFish = 2;
+      winnerGoFish = 't';
     }
+    cout << winnerGoFish << endl;
     transition("resultGoFish");
   }
 
@@ -536,6 +537,24 @@ bool goFishGUI_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
+
+     for(int i = 67; i > 0; i--){
+         //cout << "alpha" << endl;
+         SDL_RenderClear(rend);
+         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+         SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
+         Uint8 a =  Uint8(i*2);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_SetSurfaceAlphaMod(rectSurface, a);
+         SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+         rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+         SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+         SDL_RenderPresent(rend);
+         SDL_Delay(5);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+         SDL_DestroyTexture(rectTexture[i]);
+     }
+
     gameSetup(7);
     return true;
 }
@@ -550,6 +569,21 @@ bool goFishGUI_state::leave() {
    computerHand.clear();
    possibleComputerAsks.clear();
 
+   for(int i = 0; i < 67; i++){
+       //cout << "alpha" << endl;
+       Uint8 a =  Uint8(i*2);
+       SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+       SDL_SetSurfaceAlphaMod(rectSurface, a);
+       SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+       rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+       SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+       SDL_RenderPresent(rend);
+       SDL_Delay(5);
+       SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+       SDL_DestroyTexture(rectTexture[i]);
+   }
+
+
    return true;
 }
 
@@ -560,7 +594,8 @@ bool goFishGUI_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
-
+     //winnerGoFish = 't';
+     //cout << winnerGoFish << endl;
       SDL_GetMouseState(&MouseX, &MouseY);
       if(!gameOver){
         if(hasHandUpdated || messageUpdated || booksUpdated){
@@ -696,7 +731,7 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     switch(e.type) {
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          //case SDLK_SPACE:  transition("mainArea"); result = true;   break;
+          case SDLK_SPACE:  transition("resultGoFish"); result = true;   break;
           default:  break;
         } break;
       case SDL_MOUSEBUTTONDOWN:

@@ -17,7 +17,11 @@ public:
 	  SDL_Surface *s;
     SDL_Texture *to;
     TTF_Font *font;
-    SDL_Rect imageRect;
+    SDL_Rect imageRect {42, 30, 1112, 510};
+
+    SDL_Surface* rectSurface;
+    SDL_Texture* rectTexture[67];
+    SDL_Rect rect = imageRect;
 
     int textX = 35;
     int textY = 590;
@@ -25,9 +29,11 @@ public:
     int w;
     int h;
 
-    int winnerGoFish;
-    Uint32 textColor;
+
     std::string message;
+    const Uint32 WHITE = 0xffffffff;
+    const Uint32 GREEN = 0xddbbffff;
+    Uint32 textColor;
 
 
     state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
@@ -40,6 +46,7 @@ public:
 };
 
 extern std::map <std::string, state *>states;
+extern char winnerGoFish;
 
 
 #endif  /* __STATE_H__ */

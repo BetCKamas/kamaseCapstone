@@ -107,8 +107,6 @@ public:
     string goFishResponse[3] = {"None, go fish.", "Nada, go fish.", "Go fish."};
     string bookRemarks[3] = {"Got one!", "I got a book!", "A book for me!"};
 
-    Uint32 WHITE = 0xffffffff;
-    Uint32 GREEN = 0xddbbffff;
 
 };
 
