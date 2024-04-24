@@ -729,11 +729,13 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      /*
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
           case SDLK_SPACE:  transition("resultGoFish"); result = true;   break;
           default:  break;
         } break;
+        */
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
   			     case SDL_BUTTON_LEFT:
