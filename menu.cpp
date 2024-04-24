@@ -2,8 +2,6 @@
 #include <iostream>
 
 #include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
 
 #include "menu.h"
 #include "state.h"
@@ -51,7 +49,7 @@ menu_state::menu_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_
     textureCreditsW = SDL_CreateTextureFromSurface(rend, surfaceCreditsW);
     textureCreditsG = SDL_CreateTextureFromSurface(rend, surfaceCreditsG);
 
-    ts = IMG_Load("TitleScreen.png");
+    ts = IMG_Load("./gameImages/TitleScreen.png");
     tts = SDL_CreateTextureFromSurface(rend, ts);
     SDL_FreeSurface(ts);
     ts = nullptr;

@@ -87,14 +87,43 @@ bool qwerty_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
-    return true;
+
+     for(int i = 67; i > 0; i--){
+         SDL_RenderClear(rend);
+         SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+         SDL_RenderCopy(rend, tgt, nullptr, &imageRect); // display game image
+         Uint8 a =  Uint8(i*2);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+         SDL_SetSurfaceAlphaMod(rectSurface, a);
+         SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+         rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+         SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+         SDL_RenderPresent(rend);
+         SDL_Delay(5);
+         SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+         SDL_DestroyTexture(rectTexture[i]);
+     }
+     return true;
 }
 
 bool qwerty_state::leave() {
     /*
      * Called whenever we are transitioning out of this state.
      */
-    return true;
+
+   for(int i = 0; i < 67; i++){
+       Uint8 a =  Uint8(i*2);
+       SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
+       SDL_SetSurfaceAlphaMod(rectSurface, a);
+       SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
+       rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
+       SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+       SDL_RenderPresent(rend);
+       SDL_Delay(5);
+       SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
+       SDL_DestroyTexture(rectTexture[i]);
+   }
+   return true;
 }
 
 bool qwerty_state::draw() {

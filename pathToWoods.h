@@ -16,6 +16,9 @@ public:
     bool leave();
     bool draw();
     bool handle_event(const SDL_Event &e);
+
+    SDL_Surface *ptw;
+    SDL_Texture *tptw;
 };
 
 #endif  /* __PATHTOWOODS_H__ */

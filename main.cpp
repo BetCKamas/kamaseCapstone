@@ -12,6 +12,7 @@
 #include "menu.h"
 #include "credits.h"
 #include "mainArea.h"
+#include "pathToWoods.h"
 #include "goFishGUI.h"
 #include "resultGoFish.h"
 
@@ -83,7 +84,7 @@ int main(int argc, char *argv[]) {
     SDL_Renderer *rend = SDL_CreateRenderer(w, -1, 0);
 
 
-    SDL_Surface *o = IMG_Load("Overlay.png");
+    SDL_Surface *o = IMG_Load("./gameImages/Overlay.png");
     SDL_Texture *to = SDL_CreateTextureFromSurface(rend, o);
     SDL_FreeSurface(o);
     o = nullptr;
@@ -94,14 +95,15 @@ int main(int argc, char *argv[]) {
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
     states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
-    //states["fadeToBlack"] = new fadeToBlack_state(rend, w, s, to, font);
+    states["pathToWoods"] = new pathToWoods_state(rend, w, s, to, font);
     //states["fadeFromBlack"] = new fadeFromBlack_state(rend, w, s, to, font);
     //states["tiedGoFish"] = new tiedGoFish_state(rend, w, s, to, font);
 
-    transition("goFishGUI");
+    //transition("goFishGUI");
     //transition("menu");
     //transition("mainArea");
     //transition("resultGoFish");
+    transition("pathToWoods");
 
     SDL_Event e;
     bool quit = false;

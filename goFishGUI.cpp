@@ -7,8 +7,6 @@
 #include <time.h>
 
 #include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
-#include <SDL_image.h>
 
 #include "goFishGUI.h"
 #include "state.h"
@@ -479,26 +477,26 @@ goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surfac
 
      srand(time(nullptr));
 
-     gt = IMG_Load("GameTable.png");
+     gt = IMG_Load("./gameImages/GameTable.png");
      tgt = SDL_CreateTextureFromSurface(rend, gt);
      SDL_FreeSurface(gt);
      gt = nullptr;
 
-     doc = IMG_Load("Deckofcards.png");
+     doc = IMG_Load("./gameImages/Deckofcards.png");
      CARDWIDTH = doc->w / 13;
      CARDHEIGHT = doc->h / 4;
      tdoc = SDL_CreateTextureFromSurface(rend, doc);
      SDL_FreeSurface(doc);
      doc = nullptr;
 
-     pb = IMG_Load("playerBooks.png");
+     pb = IMG_Load("./gameImages/playerBooks.png");
      PLAYERBOOKWIDTH = pb->w / 7;
      PLAYERBOOKHEIGHT = pb->h;
      tpb = SDL_CreateTextureFromSurface(rend, pb);
      SDL_FreeSurface(pb);
      pb = nullptr;
 
-     cb = IMG_Load("computerBooks.png");
+     cb = IMG_Load("./gameImages/computerBooks.png");
      COMPUTERBOOKWIDTH = cb->w / 7;
      COMPUTERBOOKHEIGHT = cb->h;
      tcb = SDL_CreateTextureFromSurface(rend, cb);

@@ -3,8 +3,6 @@
 #include <cstdlib>
 
 #include <SDL.h>
-#include <SDL2_gfxPrimitives.h>
-#include <SDL_image.h>
 
 #include "mainArea.h"
 #include "state.h"
@@ -17,7 +15,7 @@ mainArea_state::mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface 
      * Keep in mind this only happens once at the start of the appliacation.
      */
 
-    ma = IMG_Load("MainArea.png");
+    ma = IMG_Load("./gameImages/MainArea.png");
     tma = SDL_CreateTextureFromSurface(rend, ma);
     SDL_FreeSurface(ma);
     ma = nullptr;
