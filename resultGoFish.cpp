@@ -112,7 +112,14 @@ bool resultGoFish_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+             case SDL_BUTTON_LEFT:
+                // if won go to mainArea with light on and then to mothmanHome
+                // if lost or tied go back to gofishgui
 
+                result = true;
+                break;
     default:  break;
     }
 
