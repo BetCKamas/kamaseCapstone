@@ -8,6 +8,8 @@
 
 using namespace std;
 
+string hench_message;
+
 mines_state::mines_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
@@ -94,7 +96,57 @@ bool mines_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+             case SDL_BUTTON_LEFT:
+                // entering cave for the first time
+                hench_message = "HALT! Who goes there?";
+                message = "Uhh, it is I, Mothman P.I.";
+                hench_message = "Who? I've never heard of you.";
+                message = "Well now you have.";
+                hench_message = "What is your purpose here?";
+                message = "I'm investigating why the power went out in town. Would you happen to know anything about that?";
+                hench_message = "I don't know anything about what the boss is doing?";
+                message = "That wasn't the question I asked.";
+                hench_message = "Uhh";
+                message = "What's your boss up to?";
+                hench_message = "Nothing at all. Definetly not anything to do with why the power is out.";
+                message = "Yeah, OK, I don't believe you.";
+                hench_message = "Why not? I'm a very believable person.";
+                message = "That's not the vibe I'm picking up on.";
+                hench_message = "How dare you harsh my vibe.";
+                message = "OK, I'm just going to take a look around then.";
+                hench_message = "OK, but yoy can't go past me.";
+                message = "Why not?";
+                hench_message = "Boss's orders.";
+                message = "Dude you are so suspisious.";
+                hench_message = "I'm just doing my job.";
+                message = "Well what would it take to get past you.";
+                hench_message = "I'm not allowed to let anyone past who doesn't haved an appointment.";
+                message = "How do I make an appointment?";
+                hench_message = "That's above my paygrade.";
+                message = "So if I get an appointment, you'll let me past?";
+                hench_message = "Correct.";
+                message = "Actually I have an appointment";
+                hench_message = "OK, please show me your appointment card.";
+                message = "Appointment card?";
+                hench_message = "Yes we give out appointment cards. You show me yours and I'll let you past.";
+                message = "Oh silly me, I must have left it in my other coat. I'll go fetch it.";
 
+                // Trying to get the henchman to move without having item
+                message = "I can't go back up to him without an appointment card. Maybe I can find one someplace.";
+
+                // going back with appointment card
+                message = "Here it is, my appointment card.";
+                hench_message = "Let me see.";
+                hench_message = "Yes this will do. You can go past.";
+                
+                // immediately transition to maze
+
+                result = true;
+                break;
+                default: break;
+              }
     default:  break;
     }
 

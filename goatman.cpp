@@ -94,6 +94,12 @@ bool goatman_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+             case SDL_BUTTON_LEFT:
+                result = true;
+                break;
+                default: break;
 
     default:  break;
     }

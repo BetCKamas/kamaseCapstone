@@ -94,7 +94,21 @@ bool maze_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+             case SDL_BUTTON_LEFT:
+                // entering maze
+                message = "A maze? This shouldn't be too hard. Good thing I can see in the dark.";
+                // moving through maze
+                message = "Why are these walls so warm? And why are they buzzing?";
+                message = "Are these server racks...with GPUs? Is this boss crypto farming?"
+                message =
+                // leaving maze
+                message = "There we go, that wasnt too bad. Lets go meet this boss and find out why he is crypto farming."
+                result = true;
+                break;
+                default: break;
+              }
     default:  break;
     }
 

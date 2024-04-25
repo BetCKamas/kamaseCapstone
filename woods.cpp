@@ -140,6 +140,7 @@ bool woods_state::handle_event(const SDL_Event &e) {
          message = "Is that so?";
          eyes_message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at than stones.";
          message = "Thanks.";
+         eyes_message = "Also, take this. I found it near the mountain earlier. Maybe you can find a use for it.";
          eyes_message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
 
          // clicking again after above convo repeats last line of it
