@@ -128,6 +128,8 @@ bool resultGoFish_state::handle_event(const SDL_Event &e) {
 
                 result = true;
                 break;
+                default: break;
+              }
     default:  break;
     }
 

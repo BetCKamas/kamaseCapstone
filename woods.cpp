@@ -8,6 +8,8 @@
 
 using namespace std;
 
+string eyes_message;
+
 woods_state::woods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
@@ -94,7 +96,58 @@ bool woods_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_BUTTON_LEFT:
+         message = "A campfire? But whose? I don't see anyone.";
+         eyes_message = "Hello";
+         message = "AHHH!";
+         eyes_message = "Sorry, I like the warmth from the fire but I like to stay in the dark tree line.";
+         message = "Phew. I was worried that you were a human camper.";
+         eyes_message = "How do you know I'm not a human camper?";
+         message = "I don't think human campers are cool enough to be a pair of red eyes without a body.";
+         eyes_message = "*blushing*";
+         eyes_message = "Yeah you right";
+         message = "But you should be careful though. We dont need a forest fire to occur.";
+         eyes_message = "Yes, yes, of course. But what are you doing out here? I've never seen you here before...";
+         message = "Right. I'm investigating why the power has gone out in town.";
+         eyes_message = "And you thought the best place to figure that out was the forest?";
+         message = "As an investigator you must leave no stones unturned.";
+         eyes_message = "There are a lot of stones out here.";
+         message = "Riiiiigggght. Can I ask you some questions?";
+         eyes_message = "First you need to do something for me.";
+         message = "And what would that be?";
+         eyes_message = "I want a smore.";
+         message = "You setup a campfire, but forgot to get ingredients for smores?";
+         eyes_message = "Normally I just want the warmth, but I have a rather large hankering for a smore. Talking makes me peckish.";
+         message = "I'll get you a smore and then you'll answer my questions, deal?";
+         eyes_message =  "Deal.";
+         message = "OK, I'll be back with your smore.";
 
+         // coming back to talk agin but no smores
+         eyes_message = "You have my smore yet?";
+         message = "Not yet. I'll be back.";
+
+         // after getting smore from bigfoot
+         message = "Heres your smore.";
+         eyes_message = "MMH! Delicious.";
+         message = "So you'll answer my questions now?";
+         eyes_message = "A deals a deal. What do you want to know?";
+         message = "Did you cause the power outage?";
+         eyes_message = "You yourself said that I have no body.";
+         message = "That doesn't mean you didn't do it. I am an equal opportunity investigator.";
+         eyes_message = "Fair, but I had nothing to do with it. I didn't even know the power was out until you told me.";
+         message = "Hmmmmm...I dont suppose you've noticed anything weird?";
+         eyes_message = "Actually, yes. The mountain has an abnormal warmth eminating from it.";
+         message = "Is that so?";
+         eyes_message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at than stones.";
+         message = "Thanks.";
+         eyes_message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
+
+         // clicking again after above convo repeats last line of it
+         eyes_message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
+
+
+         result = true;
+         break;
     default:  break;
     }
 
