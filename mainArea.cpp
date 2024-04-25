@@ -114,6 +114,15 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
           case SDLK_SPACE:  transition("goFishGUI"); result = true;   break;
           default:  break;
         } break;
+
+        case SDL_MOUSEBUTTONDOWN:
+          switch (e.button.button){
+    			     case SDL_BUTTON_LEFT:
+                  message = "The lights are out here. I wonder whats going on.";
+                  message = "A mystery is afoot. I should investigate and find out why.";
+                  result = true;
+                  break;
+    		  } break;
     default:  break;
     }
 

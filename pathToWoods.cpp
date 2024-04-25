@@ -94,7 +94,24 @@ bool pathToWoods_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      // add transition to woods and back to town
+      case SDL_BUTTON_LEFT:
+        // for when clicking on bee hive first time
+         message = "Excuse me? Is anyone home?";
+         bee-message = "*bzzt-bzzt*";
+         bee-message = "We're asleep. Come back later.";
+         message = "I'm sorry to bother you, but do you have any honey?";
+         bee-message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey."
 
+         // clicking on bee hive after the above
+         bee-message = "*bzzt-bzzt*";
+         bee-message = "Unless you have a flower, let us sleep kid.";
+         // have flower
+         message = "I have the flower, here you go.";
+         bee-message = "This is a good flower. Here's your honey kid."
+
+         result = true;
+         break;
     default:  break;
     }
 
