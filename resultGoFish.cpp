@@ -124,6 +124,10 @@ bool resultGoFish_state::handle_event(const SDL_Event &e) {
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
                 // if won go to mainArea with light on and then to mothmanHome
+                message = "If you ever want to play another game fo go fish, come into the town and find me.";
+                gmessage = "Really?";
+                message = "Go fish is fun, and so is looking at street lights.";
+                gmessage = "Thanks Investagator. I'll take you up on that offer."
                 // if lost or tied go back to gofishgui
 
                 result = true;

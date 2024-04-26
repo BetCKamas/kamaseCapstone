@@ -8,6 +8,8 @@
 
 using namespace std;
 
+string gmessage;
+
 goatman_state::goatman_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
@@ -97,6 +99,29 @@ bool goatman_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
+                message = "Hello Boss.";
+                gmessage = "Who are you?";
+                message = "I'm Mothman P.I.";
+                gmessage = "I wasn't aware I had an appointment tonight.";
+                message = "I wasn't planning on being here tonight either, but the power in town is out. And I can't help but notice that you do.";
+                gmessage = "Is that so? Living in a mountain mine system is quite isolating.";
+                message = "So you didn't divert the power from the town to this mountain for your bitcoin mining?";
+                gmessage = "How do you know about that?";
+                message = "Everyone who comes to see you literally walks through your farming rig.";
+                gmessage = "Oh yeah...";
+                message = "So what are you doing with all that bitcoin?";
+                gmessage = "I need it to be able to play in an online tournamant.";
+                message = "A tournament?";
+                gmessage = "A go fish tournament.";
+                message = "You are farming bitcoin to be able to play go fish?";
+                gmessage = "Yes.";
+                message = "But the town needs power!";
+                gmessage = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and let power back to the town."
+                message = "Let's play.";
+
+                // transition to go fish
+
+
                 result = true;
                 break;
                 default: break;
