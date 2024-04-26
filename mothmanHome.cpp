@@ -94,7 +94,22 @@ bool mothmanHome_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+  			     case SDL_BUTTON_LEFT:
+                // beginning
+                message = "What a long day. Some relaxation is much needed.";
+                message = "*electricity pops*";
+                message = "Huh? What? No.";
+                message = "Where? Where is my light?";
+                message = "I guess I could go into town tonight. Theres a nice street lamp next to Big's restaurant";
 
+                // ending
+                message = "Ahh, lamp.";
+
+                result = true;
+                break;
+  		  } break;
     default:  break;
     }
 
