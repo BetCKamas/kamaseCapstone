@@ -117,7 +117,9 @@ bool goatman_state::handle_event(const SDL_Event &e) {
                 gmessage = "Yes.";
                 message = "But the town needs power!";
                 gmessage = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and let power back to the town."
-                message = "Let's play.";
+                message = "You'll cut back on your farming if I play you in go fish?";
+                gmessage = "And win, yes.";
+                message = "OK, I'll play you.";
 
                 // transition to go fish
 
