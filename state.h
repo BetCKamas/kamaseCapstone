@@ -33,8 +33,6 @@ public:
 
 
     std::string message;
-    const Uint32 WHITE = (Uint32)0xffffffff;
-    const Uint32 GREEN = (Uint32)0x00ff00ff;
     const Uint32 mothmanC = (Uint32)0x964B00ff;
     const Uint32 bigfootC = (Uint32)0xff8080ff;
     const Uint32 eyesC = (Uint32)0xff064228;

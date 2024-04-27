@@ -8,7 +8,7 @@
 
 using namespace std;
 
-string gmessage;
+int dialogueLine = 0;
 
 goatman_state::goatman_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -83,6 +83,127 @@ bool goatman_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
+
+    SDL_RenderClear(rend);
+    SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+    SDL_RenderCopy(rend, tg, nullptr, &imageRect); // display game image
+
+
+    switch(dialogueLine){
+         case 0:
+         message = "Hello Boss.";
+         textColor = mothmanC;
+         break;
+
+         case 1:
+         message = "Who are you?";
+         textColor = goatmanC;
+         break;
+
+         case 2:
+         message = "I'm Mothman P.I.";
+         textColor = mothmanC;
+         break;
+
+         case 3:
+         message = "I wasn't aware I had an appointment tonight.";
+         textColor = goatmanC;
+         break;
+
+         case 4:
+         message = "I wasn't planning on being here tonight either, but the power in town is out. And I can't help but notice that you do.";
+         textColor = mothmanC;
+         break;
+
+         case 5:
+         message = "Is that so? Living in a mountain mine system is quite isolating.";
+         textColor = goatmanC;
+         break;
+
+         case 6:
+         message = "So you didn't divert the power from the town to this mountain for your bitcoin mining?";
+         textColor = mothmanC;
+         break;
+
+         case 7:
+         message = "How do you know about that?";
+         textColor = goatmanC;
+         break;
+
+         case 8:
+         message = "Everyone who comes to see you literally walks through your farming rig.";
+         textColor = mothmanC;
+         break;
+
+         case 9:
+         message = "Oh yeah...";
+         textColor = goatmanC;
+         break;
+
+         case 10:
+         message = "So what are you doing with all that bitcoin?";
+         textColor = mothmanC;
+         break;
+
+         case 11:
+         message = "I need it to be able to play in an online tournamant.";
+         textColor = goatmanC;
+         break;
+
+         case 12:
+         message = "A tournament?";
+         textColor = mothmanC;
+         break;
+
+         case 13:
+         message = "A go fish tournament.";
+         textColor = goatmanC;
+         break;
+
+         case 14:
+         message = "You are farming bitcoin to be able to play go fish?";
+         textColor = mothmanC;
+         break;
+
+         case 15:
+         message = "Yes.";
+         textColor = goatmanC;
+         break;
+
+         case 16:
+         message = "But the town needs power!";
+         textColor = mothmanC;
+         break;
+
+         case 17:
+         message = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and let power back to the town.";
+         textColor = goatmanC;
+         break;
+
+         case 18:
+         message = "You'll cut back on your farming if I play you in go fish?";
+         textColor = mothmanC;
+         break;
+
+         case 19:
+         message = "And win, yes.";
+         textColor = goatmanC;
+         break;
+
+         case 20:
+         message = "OK, I'll play you.";
+         textColor = mothmanC;
+         transition("goFishGUI");
+         break;
+
+
+
+         default: break;
+       }
+    
+
+    stringColor(rend, textX, textY, message.c_str(), textColor);
+    SDL_RenderPresent(rend);
     return true;
 }
 
@@ -99,34 +220,11 @@ bool goatman_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
-                message = "Hello Boss.";
-                gmessage = "Who are you?";
-                message = "I'm Mothman P.I.";
-                gmessage = "I wasn't aware I had an appointment tonight.";
-                message = "I wasn't planning on being here tonight either, but the power in town is out. And I can't help but notice that you do.";
-                gmessage = "Is that so? Living in a mountain mine system is quite isolating.";
-                message = "So you didn't divert the power from the town to this mountain for your bitcoin mining?";
-                gmessage = "How do you know about that?";
-                message = "Everyone who comes to see you literally walks through your farming rig.";
-                gmessage = "Oh yeah...";
-                message = "So what are you doing with all that bitcoin?";
-                gmessage = "I need it to be able to play in an online tournamant.";
-                message = "A tournament?";
-                gmessage = "A go fish tournament.";
-                message = "You are farming bitcoin to be able to play go fish?";
-                gmessage = "Yes.";
-                message = "But the town needs power!";
-                gmessage = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and let power back to the town."
-                message = "You'll cut back on your farming if I play you in go fish?";
-                gmessage = "And win, yes.";
-                message = "OK, I'll play you.";
-
-                // transition to go fish
-
-
+                dialogueLine++;
                 result = true;
                 break;
                 default: break;
+              }
 
     default:  break;
     }
