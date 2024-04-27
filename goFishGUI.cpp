@@ -318,7 +318,7 @@ void goFishGUI_state::takeTurn(){
 
       if(gofsh){
         message = goFishResponse[rand()%3];
-        textColor = GREEN;
+        textColor = goatmanC;
         messageUpdated = true;
         draw();
         SDL_Delay(1500);
@@ -329,13 +329,13 @@ void goFishGUI_state::takeTurn(){
         } else {
           message = "Got a match!";
           messageUpdated = true;
-          textColor = WHITE;
+          textColor = mothmanC;
           draw();
           SDL_Delay(1500);
         }
       } else {
         message = "Here you go.";
-        textColor = GREEN;
+        textColor = goatmanC;
         draw();
         SDL_Delay(1500);
 
@@ -343,7 +343,7 @@ void goFishGUI_state::takeTurn(){
              removeBookFromHand(player, cardAskedFor);
              message = bookRemarks[rand()%3];
              messageUpdated = true;
-             textColor = WHITE;
+             textColor = mothmanC;
              draw();
              SDL_Delay(1500);
         }
@@ -352,7 +352,7 @@ void goFishGUI_state::takeTurn(){
       if(checkForBook(player, cardGotFromGoFishing)){
           removeBookFromHand(player, cardGotFromGoFishing);
           message = bookRemarks[rand()%3];
-          textColor = WHITE;
+          textColor = mothmanC;
           messageUpdated = true;
           draw();
           SDL_Delay(1500);
@@ -388,7 +388,7 @@ void goFishGUI_state::takeTurn(){
       message += cardAskedFor;
       message += "'s?";
       messageUpdated = true;
-      textColor = GREEN;
+      textColor = goatmanC;
       draw();
       SDL_Delay(1500);
 
@@ -397,7 +397,7 @@ void goFishGUI_state::takeTurn(){
       if(gofsh){
         message = goFishResponse[rand()%3];
         messageUpdated = true;
-        textColor = WHITE;
+        textColor = mothmanC;
         draw();
         SDL_Delay(1500);
         fshCardMatch = goFish(comp, cardAskedFor);
@@ -407,12 +407,12 @@ void goFishGUI_state::takeTurn(){
         } else {
           message = "Got a match!";
           messageUpdated = true;
-          textColor = GREEN;
+          textColor = goatmanC;
           draw();
           SDL_Delay(1500);
         }
       } else {
-        textColor = WHITE;
+        textColor = mothmanC;
         message = "Here you go.";
         messageUpdated = true;
         draw();
@@ -422,7 +422,7 @@ void goFishGUI_state::takeTurn(){
               removeBookFromHand(comp, cardAskedFor);
               message = bookRemarks[rand()%3];
               messageUpdated = true;
-              textColor = GREEN;
+              textColor = goatmanC;
               draw();
               SDL_Delay(1500);
         }
@@ -432,7 +432,7 @@ void goFishGUI_state::takeTurn(){
           removeBookFromHand(comp, computerHand.back().rank);
           message = bookRemarks[rand()%3];
           messageUpdated = true;
-          textColor = GREEN;
+          textColor = goatmanC;
           draw();
           SDL_Delay(1500);
       }
@@ -753,7 +753,7 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
                   message += cardRanksOnScreen[cardAskedForLoc];
                   message += "'s?";
                   messageUpdated = true;
-                  textColor = WHITE;
+                  textColor = mothmanC;
                   draw();
                   SDL_Delay(1500);
                   takeTurn();
