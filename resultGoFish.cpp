@@ -9,13 +9,16 @@
 
 using namespace std;
 
+bool endConvo = false;
+bool retry = false;
+
 resultGoFish_state::resultGoFish_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
      */
 
-     rgf = IMG_Load("./gameImages/Resultgf.png");
+     rgf = IMG_Load("./gameImages/Talktogoatman.png");
      trgf = SDL_CreateTextureFromSurface(rend, rgf);
      SDL_FreeSurface(rgf);
      rgf = nullptr;
@@ -36,8 +39,8 @@ bool resultGoFish_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
+     dialogueLine = 0;
      for(int i = 67; i > 0; i--){
-         //cout << "alpha" << endl;
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_RenderCopy(rend, trgf, nullptr, &imageRect); // display game image
@@ -59,6 +62,7 @@ bool resultGoFish_state::leave() {
     /*
      * Called whenever we are transitioning out of this state.
      */
+     message = "";
      for(int i = 0; i < 67; i++){
          //cout << "alpha" << endl;
          Uint8 a =  Uint8(i*2);
@@ -86,26 +90,67 @@ bool resultGoFish_state::draw() {
 
      SDL_RenderClear(rend);
      SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+     SDL_RenderCopy(rend, trgf, nullptr, &imageRect); // display overlay
 
      switch(winnerGoFish){
        case 't': // tied
-         SDL_SetRenderDrawColor(rend, (Uint8)0x00, (Uint8)0x00, (Uint8)0xFF, 0xFF);
-         message = "We have tied. So close, but no cigar. Are you ready to try again?";
+         switch(dialogueLine){
+           case 0:
+           message = "We have tied. So close, but no cigar. We go again.";
+           textColor = goatmanC;
+           break;
+
+           default: transition("goFishGUI"); break;
+         }
          break;
        case 'c': // case computer wins
-         SDL_SetRenderDrawColor(rend, (Uint8)0xFF, (Uint8)0xFF, (Uint8)0x00, 0xFF);
-         message = "You have lost. The lights stay off until you beat me. Are you ready to try again?";
+        switch(dialogueLine){
+         case 0:
+         message = "You have lost. The lights stay off until you beat me. Shall we?";
+         textColor = goatmanC;
+         break;
+
+         default: transition("goFishGUI"); break;
+        }
          break;
        case 'p': // case player wins
-         SDL_SetRenderDrawColor(rend, (Uint8)0xFF, (Uint8)0xA5, (Uint8)0x00, 0xFF);
-         message = "You have won. I will turn the lights back on.";
-         break;
+         switch(dialogueLine){
+           case 0:
+           message = "You have won. I will turn the lights back on.";
+           textColor = goatmanC;
+           break;
+
+           case 1:
+           message = "If you ever want to play another game fo go fish, come into the town and find me.";
+           textColor = mothmanC;
+           break;
+
+           case 2:
+           message = "Really?";
+           textColor = goatmanC;
+           break;
+
+           case 3:
+           message = "Go fish is fun, and so is looking at street lights.";
+           textColor = mothmanC;
+           break;
+
+           case 4:
+           message = "Thanks Investagator. I'll take you up on that offer.";
+           textColor = goatmanC;
+           break;
+
+           default: endConvo = true; break;
+         } break;
+
        default: break;
      }
-     textColor = GREEN;
-     SDL_RenderFillRect(rend, &imageRect);
      stringColor(rend, textX, textY, message.c_str(), textColor);
      SDL_RenderPresent(rend);
+
+     if(endConvo){
+       transition("mothmanHome");
+     }
 
      return true;
 }
@@ -123,19 +168,15 @@ bool resultGoFish_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
-                // if won go to mainArea with light on and then to mothmanHome
-                message = "If you ever want to play another game fo go fish, come into the town and find me.";
-                gmessage = "Really?";
-                message = "Go fish is fun, and so is looking at street lights.";
-                gmessage = "Thanks Investagator. I'll take you up on that offer."
-                // if lost or tied go back to gofishgui
-
+                dialogueLine++;
                 result = true;
                 break;
                 default: break;
               }
     default:  break;
     }
+
+    SDL_FlushEvents(SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONDOWN + 1);
 
     return result;
 }

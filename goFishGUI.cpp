@@ -13,7 +13,6 @@
 
 using namespace std;
 
-string message;
 bool hasHandUpdated = false;
 bool messageUpdated = false;
 bool booksUpdated = false;
@@ -340,6 +339,7 @@ void goFishGUI_state::takeTurn(){
         SDL_Delay(1500);
 
         if(checkForBook(player, cardAskedFor)){
+             SDL_Delay(1500);
              removeBookFromHand(player, cardAskedFor);
              message = bookRemarks[rand()%3];
              messageUpdated = true;
@@ -350,6 +350,7 @@ void goFishGUI_state::takeTurn(){
       }
 
       if(checkForBook(player, cardGotFromGoFishing)){
+          SDL_Delay(1500);
           removeBookFromHand(player, cardGotFromGoFishing);
           message = bookRemarks[rand()%3];
           textColor = mothmanC;
@@ -462,7 +463,7 @@ void goFishGUI_state::checkGameOver(){
     } else {
       winnerGoFish = 't';
     }
-    cout << winnerGoFish << endl;
+    //cout << winnerGoFish << endl;
     transition("resultGoFish");
   }
 
@@ -553,6 +554,12 @@ bool goFishGUI_state::enter() {
          SDL_DestroyTexture(rectTexture[i]);
      }
 
+    playerBooks = 0;
+    compBooks = 0;
+
+    message = "You can go first Investagator";
+    textColor = goatmanC;
+
     gameSetup(7);
     return true;
 }
@@ -566,9 +573,13 @@ bool goFishGUI_state::leave() {
    playerHand.clear();
    computerHand.clear();
    possibleComputerAsks.clear();
+   cardsOnScreen.clear();
+
+
+
+   message = "";
 
    for(int i = 0; i < 67; i++){
-       //cout << "alpha" << endl;
        Uint8 a =  Uint8(i*2);
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
        SDL_SetSurfaceAlphaMod(rectSurface, a);
@@ -727,13 +738,13 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-      /*
+/*
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          case SDLK_SPACE:  transition("resultGoFish"); result = true;   break;
+          case SDLK_SPACE:  transition("goatman"); result = true;   break;
           default:  break;
         } break;
-        */
+*/
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
   			     case SDL_BUTTON_LEFT:

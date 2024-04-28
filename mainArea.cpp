@@ -9,11 +9,16 @@
 
 using namespace std;
 
+bool firstVisitMA = false;
+
 mainArea_state::mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
      */
+
+    dialogueLine = 0;
+    firstVisitMA = true;
 
     ma = IMG_Load("./gameImages/MainArea.png");
     tma = SDL_CreateTextureFromSurface(rend, ma);
@@ -93,7 +98,12 @@ bool mainArea_state::draw() {
      SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
      SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
 
-     stringColor(rend, textX, textY, "testing text location", 0xffffffff);
+     textColor = mothmanC;
+
+     if(firstVisitMA){
+       stringColor(rend, textX, textY, "The lights are out here too. I wonder whats going on.", textColor);
+       stringColor(rend, textX, textY+15, "A mystery is afoot. I should investigate and find out why.", textColor);
+     }
 
      SDL_RenderPresent(rend);
      return true;
@@ -111,18 +121,18 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
     switch(e.type) {
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          //case SDLK_SPACE:  transition("goFishGUI"); result = true;   break;
+          case SDLK_SPACE:  transition("bigfoot"); firstVisitMA = false; result = true;   break;
           default:  break;
         } break;
 
         case SDL_MOUSEBUTTONDOWN:
           switch (e.button.button){
-    			     case SDL_BUTTON_LEFT:
-                  message = "The lights are out here too. I wonder whats going on.";
-                  message = "A mystery is afoot. I should investigate and find out why.";
+               case SDL_BUTTON_LEFT:
+                  dialogueLine++;
                   result = true;
                   break;
-    		  } break;
+                  default: break;
+          }
     default:  break;
     }
 

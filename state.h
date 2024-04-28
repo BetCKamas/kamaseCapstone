@@ -36,9 +36,12 @@ public:
     const Uint32 mothmanC = (Uint32)0x964B00ff;
     const Uint32 bigfootC = (Uint32)0xff8080ff;
     const Uint32 eyesC = (Uint32)0xff064228;
-    const Uint32 goatmanC = (Uint32)0x000080ff;
+    const Uint32 goatmanC = (Uint32)0xffff0000;
     const Uint32 henchmanC = (Uint32)0xffff9f00;
     Uint32 textColor;
+
+    int dialogueLine = 0;
+
 
 
     state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);

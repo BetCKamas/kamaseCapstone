@@ -8,9 +8,7 @@
 
 using namespace std;
 
-string message;
-int dialogueLine = 0;
-bool firstVisit = false;
+bool firstVisitB = false;
 bool hereForSmore = false;
 bool honeyRequest = false;
 bool haveHoney = false;
@@ -26,7 +24,7 @@ bigfoot_state::bigfoot_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s
      tb = SDL_CreateTextureFromSurface(rend, b);
      SDL_FreeSurface(b);
      b = nullptr;
-     firstVisit = true;
+     firstVisitB = true;
 }
 
 bigfoot_state::~bigfoot_state() {
@@ -95,7 +93,7 @@ bool bigfoot_state::draw() {
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
 
-    if(firstVisit){
+    if(firstVisitB){
       switch(dialogueLine){
         case 0:
         message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
@@ -155,7 +153,7 @@ bool bigfoot_state::draw() {
         case 11:
         message= "Come back any time.";
         textColor = bigfootC;
-        firstVisit = false;
+        firstVisitB = false;
         dialogueLine = 0;
         break;
 
@@ -247,7 +245,6 @@ bool bigfoot_state::draw() {
       textColor = bigfootC;
     }
 
-
     stringColor(rend, textX, textY, message.c_str(), textColor);
     SDL_RenderPresent(rend);
 
@@ -264,6 +261,11 @@ bool bigfoot_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_KEYDOWN:
+          switch(e.key.keysym.sym) {
+          case SDLK_SPACE:  transition("mainArea"); result = true;   break;
+          default:  break;
+        } break;
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:

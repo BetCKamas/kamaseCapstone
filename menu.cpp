@@ -158,7 +158,7 @@ bool menu_state::handle_event(const SDL_Event &e) {
                   transition("credits"); result = true;; break;
                 }
                 if(pHover){
-                  transition("goFishGUI"); result = true;; break;
+                  transition("mothmanHome"); result = true;; break;
                 }
   		  } break;
 

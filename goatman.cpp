@@ -8,8 +8,6 @@
 
 using namespace std;
 
-int dialogueLine = 0;
-
 goatman_state::goatman_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
@@ -37,7 +35,7 @@ bool goatman_state::enter() {
     /*
      * Called whenever this state is being transitioned into.
      */
-
+     dialogueLine = 0;
      for(int i = 67; i > 0; i--){
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
@@ -60,6 +58,8 @@ bool goatman_state::leave() {
     /*
      * Called whenever we are transitioning out of this state.
      */
+
+   message = "";
 
    for(int i = 0; i < 67; i++){
        Uint8 a =  Uint8(i*2);
@@ -91,7 +91,7 @@ bool goatman_state::draw() {
 
     switch(dialogueLine){
          case 0:
-         message = "Hello Boss.";
+         message = "Hello...Boss is it?";
          textColor = mothmanC;
          break;
 
@@ -111,8 +111,9 @@ bool goatman_state::draw() {
          break;
 
          case 4:
-         message = "I wasn't planning on being here tonight either, but the power in town is out. And I can't help but notice that you do.";
+         message = "I wasn't planning on being here tonight either, but the power in town is out. And I can't";
          textColor = mothmanC;
+         stringColor(rend, textX, textY+15, "help but notice that you have power right now.", textColor);
          break;
 
          case 5:
@@ -176,8 +177,9 @@ bool goatman_state::draw() {
          break;
 
          case 17:
-         message = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and let power back to the town.";
+         message = "Tell you what, let's play a game of go fish, and if you win, I'll cut back on my farm and";
          textColor = goatmanC;
+         stringColor(rend, textX, textY+15, "let power back to the town.", textColor);
          break;
 
          case 18:
@@ -200,7 +202,7 @@ bool goatman_state::draw() {
 
          default: break;
        }
-    
+
 
     stringColor(rend, textX, textY, message.c_str(), textColor);
     SDL_RenderPresent(rend);
@@ -217,6 +219,12 @@ bool goatman_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+      case SDL_KEYDOWN:
+          switch(e.key.keysym.sym) {
+          case SDLK_SPACE:  transition("goFishGUI"); result = true;   break;
+          default:  break;
+        } break;
+
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:

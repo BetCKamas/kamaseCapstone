@@ -9,12 +9,11 @@
 using namespace std;
 
 string eyes_message;
-bool firstVisit = false;
+bool firstVisitE = false;
 bool askForSmore = false;
 bool haveSmore = false;
 bool noMoreDialogue = false;
 
-int dialogueLine = 0;
 
 woods_state::woods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -27,7 +26,7 @@ woods_state::woods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SD
      SDL_FreeSurface(w);
      w = nullptr;
 
-     firstVisit = true;
+     firstVisitE = true;
 }
 
 woods_state::~woods_state() {
@@ -92,7 +91,7 @@ bool woods_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
-    if(firstVisit){
+    if(firstVisitE){
       switch(dialogueLine){
         case 0:
         message = "A campfire? But whose? I don't see anyone.";
@@ -213,7 +212,7 @@ bool woods_state::draw() {
         message = "OK, I'll be back with your smore.";
         textColor = mothmanC;
         dialogueLine = 0;
-        firstVisit = false;
+        firstVisitE = false;
         askForSmore = true;
         break;
 
