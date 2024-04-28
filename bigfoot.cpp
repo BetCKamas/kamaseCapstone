@@ -122,7 +122,7 @@ bool bigfoot_state::draw() {
     if(smoreVisible)
        SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
 
-    if(firstVisitB){
+    if(firstVisitB && askBigfootForSmore){
       switch(dialogueLine){
         case 0:
         message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
@@ -176,24 +176,109 @@ bool bigfoot_state::draw() {
         break;
 
         case 10:
-        message = "OK, well thank you for your time.";
+        message = "Do you by any chance have any smore ingredients?";
         textColor = mothmanC;
         break;
 
         case 11:
-        message= "Come back any time.";
+        message = "I do.";
         textColor = bigfootC;
-        firstVisitB = false;
-        dialogueLine = 0;
+        break;
+
+        case 12:
+        message = "Can I have enough for one smore?";
+        textColor = mothmanC;
+        break;
+
+        case 13:
+        message = "Tell you what kid. I am in need of some honey for my bread. You get me some honey,";
+        textColor = bigfootC;
+        stringColor(rend, textX, textY+15, "I'll give you a smore.", textColor);
+        break;
+
+        case 14:
+        message = "Deal, I'll be back with the honey.";
+        textColor = mothmanC;
+        hereForSmore = false;
         inConvoB = false;
-        secondVisitB = true;
+        honeyRequest = true;
+        secondVisitB = false;
+        askBeesForHoney = true;
+        firstVisitB = false;
         break;
 
         default : break;
       }
     }
 
-    if(hereForSmore && !firstVisitB && secondVisitB){
+    if(firstVisitB && !askBigfootForSmore){
+      switch(dialogueLine){
+        case 0:
+        message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
+        textColor = bigfootC;
+        inConvoB = true;
+        break;
+
+        case 1:
+        message = "Oh thats ok, I'm not hungry right now. I just wanted to ask you some questions if that's alright.";
+        textColor = mothmanC;
+        break;
+
+        case 2:
+        message= "Questions? What kind of questions?";
+        textColor = bigfootC;
+        break;
+
+        case 3:
+        message = "About the power outage.";
+        textColor = mothmanC;
+        break;
+
+        case 4:
+        message= "Oh. Theres not much to say really. I was doing some prep working making some bread when the power went.";
+        textColor = bigfootC;
+        break;
+
+        case 5:
+        message = "Breadmaking? That's a difficult art to conquer.";
+        textColor = mothmanC;
+        break;
+
+        case 6:
+        message= "Secret family recipe. Tradition has been passed down within my family.";
+        textColor = bigfootC;
+        break;
+
+        case 7:
+        message= "Lucky for me, bread dough can rise without the power.";
+        textColor = bigfootC;
+        break;
+
+        case 8:
+        message = "So you know nothing about the power outage?";
+        textColor = mothmanC;
+        break;
+
+        case 9:
+        message= "Nothin.";
+        textColor = bigfootC;
+        break;
+
+        case 10:
+        message = "OK, well thank you for your time";
+        textColor = mothmanC;
+        break;
+
+        case 11:
+        message = "No problem, come back any time.";
+        textColor = bigfootC;
+        break;
+
+        default : break;
+      }
+    }
+
+    if(hereForSmore && !honeyRequest && secondVisitB){
       switch(dialogueLine){
         case 1:
         message = "Welcome back, what can I do ya for";
