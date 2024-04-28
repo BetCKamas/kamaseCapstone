@@ -61,6 +61,9 @@ bool pathToWoods_state::enter() {
      message = "";
      dialogueLine = 0;
 
+     //if(flowerVisible)
+      //  flowerForBees = true;
+
      return true;
 }
 
@@ -101,14 +104,20 @@ bool pathToWoods_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tptw, nullptr, &imageRect); // display game image
-    if(honeyVisible)
+/*
+    if(honeyVisible){
        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
-    if(flowerVisible)
+    }
+    if(flowerVisible){
        SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
-    if(appointmentcardVisible)
+    }
+    if(appointmentcardVisible){
        SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
-
-
+    }
+    if(smoreVisible){
+       SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
+    }
+    */
     if(askBeesForHoney){
        switch(dialogueLine){
          case 1:
@@ -204,7 +213,6 @@ bool pathToWoods_state::handle_event(const SDL_Event &e) {
              if(checkCollision(MouseX, MouseY, beesR) && flowerForBees){
                dialogueLine = 0;
                noflowerForBees = false;
-               flowerForBees = true;
              }
 
              dialogueLine++;

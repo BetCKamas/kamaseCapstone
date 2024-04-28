@@ -31,10 +31,16 @@ char winnerGoFish;
 bool askBigfootForSmore;
 bool honeyRequest;
 bool flowerForBees;
-bool honeyVisible;
-bool flowerVisible;
-bool appointmentcardVisible;
-bool smoreVisible;
+bool honeyVisible = false;
+bool flowerVisible = false;
+bool appointmentcardVisible = false;
+bool smoreVisible = false;
+SDL_Texture *th;
+SDL_Texture *tac;
+SDL_Texture *tf;
+SDL_Texture *ts; 
+
+
 
 map <string, state *>states;
 string current_state = "";
@@ -102,6 +108,27 @@ int main(int argc, char *argv[]) {
     SDL_Texture *to = SDL_CreateTextureFromSurface(rend, o);
     SDL_FreeSurface(o);
     o = nullptr;
+
+    SDL_Surface *h = IMG_Load("./gameImages/Honey.png");
+    th = SDL_CreateTextureFromSurface(rend, h);
+    SDL_FreeSurface(h);
+    h = nullptr;
+
+    SDL_Surface *ac = IMG_Load("./gameImages/Appointmentcard.png");
+    tac = SDL_CreateTextureFromSurface(rend, ac);
+    SDL_FreeSurface(ac);
+    ac = nullptr;
+
+    SDL_Surface *f = IMG_Load("./gameImages/Flower.png");
+    tf = SDL_CreateTextureFromSurface(rend, f);
+    SDL_FreeSurface(f);
+    f = nullptr;
+
+    SDL_Surface *sm = IMG_Load("./gameImages/Smore.png");
+    ts = SDL_CreateTextureFromSurface(rend, s);
+    SDL_FreeSurface(s);
+    s = nullptr;
+
 
 
     states["menu"] = new menu_state(rend, w, s, to, font);

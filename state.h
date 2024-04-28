@@ -21,16 +21,10 @@ public:
     TTF_Font *font;
     SDL_Rect imageRect {42, 30, 1112, 510};
 
-    SDL_Texture *th;
+
     SDL_Rect honeyRect {790, 578, 90, 103};
-
-    SDL_Texture *tac;
     SDL_Rect appointmentcardRect {880, 600, 108, 74};
-
-    SDL_Texture *tf;
     SDL_Rect flowerRect {1000, 578, 70, 103};
-
-    SDL_Texture *ts;
     SDL_Rect smoreRect {1080, 600, 85, 80};
 
     SDL_Surface* rectSurface;
@@ -75,6 +69,10 @@ extern bool honeyVisible;
 extern bool appointmentcardVisible;
 extern bool flowerVisible;
 extern bool smoreVisible;
+extern SDL_Texture *th;
+extern SDL_Texture *tac;
+extern SDL_Texture *tf;
+extern SDL_Texture *ts;
 
 
 

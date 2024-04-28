@@ -72,6 +72,9 @@ bool woods_state::enter() {
 
      dialogueLine = 0;
 
+     if(smoreVisible)
+        haveSmore = true;
+
      return true;
 }
 
@@ -112,15 +115,17 @@ bool woods_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tw, nullptr, &imageRect); // display game image
+    if(honeyVisible)
+       SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+    if(flowerVisible)
+       SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+    if(appointmentcardVisible)
+       SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+
+
     if(dialogueLine != 0 || !firstVisitE)
       SDL_RenderCopy(rend, te, nullptr, &eyesR); // display eyes
-      if(honeyVisible)
-         SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
-      if(flowerVisible)
-         SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
-      if(appointmentcardVisible)
-         SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
-  
+
 
     if(firstVisitE){
       switch(dialogueLine){

@@ -64,6 +64,8 @@ bool bigfoot_state::enter() {
      dialogueLine = 0;
      message = "";
 
+     honeyVisible = true;
+
      if(honeyVisible)
         haveHoney = true;
 
@@ -106,6 +108,7 @@ bool bigfoot_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
+
     if(honeyVisible)
        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
     if(flowerVisible)
@@ -183,7 +186,7 @@ bool bigfoot_state::draw() {
       }
     }
 
-    if(hereForSmore){
+    if(hereForSmore && !firstVisitB){
       switch(dialogueLine){
         case 1:
         message = "Welcome back, what can I do ya for";
@@ -261,6 +264,7 @@ bool bigfoot_state::draw() {
         textColor = bigfootC;
         haveHoney = false;
         honeyVisible = false;
+        smoreVisible = true;
         noOtherDialogue = true;
         break;
 
