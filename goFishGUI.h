@@ -100,7 +100,6 @@ public:
     int COMPUTERBOOKHEIGHT;
     int modRank;
     int suitRank;
-    int MouseX, MouseY;
     int space = 0;
 
     string waysToAsk[3] = {"Do you have any ", "Any ", "What about any "};

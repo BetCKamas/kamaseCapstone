@@ -19,6 +19,14 @@ public:
 
     SDL_Surface *w;
     SDL_Texture *tw;
+
+    SDL_Surface *e;
+    SDL_Texture *te;
+
+    SDL_Rect eyesR {imageRect.x+240, imageRect.y+140, 150, 47};
+
+    SDL_Rect moveBackPathR {imageRect.x + imageRect.w - imageRect.w/5, imageRect.y, imageRect.w/5, imageRect.h};
+
 };
 
 #endif  /* __WOODS_H__ */

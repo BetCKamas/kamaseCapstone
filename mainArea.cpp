@@ -94,6 +94,7 @@ bool mainArea_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
+     SDL_GetMouseState(&MouseX, &MouseY);
      SDL_RenderClear(rend);
      SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
      SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
@@ -119,16 +120,29 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
+/*
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
           case SDLK_SPACE:  transition("bigfoot"); firstVisitMA = false; result = true;   break;
           default:  break;
         } break;
-
+*/
         case SDL_MOUSEBUTTONDOWN:
           switch (e.button.button){
                case SDL_BUTTON_LEFT:
-                  dialogueLine++;
+                  if(checkCollision(MouseX, MouseY, woodsR)){
+                    transition("pathToWoods");
+                    firstVisitMA = false;
+                  }
+                  if(checkCollision(MouseX, MouseY, dinerR)){
+                    transition("bigfoot");
+                    firstVisitMA = false;
+                  }
+                  if(checkCollision(MouseX, MouseY, minesR)){
+                    transition("mines");
+                    firstVisitMA = false;
+                  }
+
                   result = true;
                   break;
                   default: break;

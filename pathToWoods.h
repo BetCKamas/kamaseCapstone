@@ -19,6 +19,9 @@ public:
 
     SDL_Surface *ptw;
     SDL_Texture *tptw;
+
+    SDL_Rect moveIntoWoodsR {imageRect.x, imageRect.y, imageRect.w/5, imageRect.h};
+    SDL_Rect moveBackDR {imageRect.x + imageRect.w - imageRect.w/5, imageRect.y, imageRect.w/5, imageRect.h};
 };
 
 #endif  /* __PATHTOWOODS_H__ */

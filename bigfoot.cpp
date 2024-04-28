@@ -10,9 +10,9 @@ using namespace std;
 
 bool firstVisitB = false;
 bool hereForSmore = false;
-bool honeyRequest = false;
 bool haveHoney = false;
 bool noOtherDialogue = false;
+bool inConvoB = false;
 
 bigfoot_state::bigfoot_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -25,6 +25,8 @@ bigfoot_state::bigfoot_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s
      SDL_FreeSurface(b);
      b = nullptr;
      firstVisitB = true;
+     askBigfootForSmore = false;
+     honeyRequest = false;
 }
 
 bigfoot_state::~bigfoot_state() {
@@ -58,6 +60,10 @@ bool bigfoot_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     dialogueLine = 0;
+     message = "";
+
      return true;
 }
 
@@ -79,6 +85,9 @@ bool bigfoot_state::leave() {
        SDL_DestroyTexture(rectTexture[i]);
    }
    return true;
+
+   dialogueLine = 0;
+   message = "";
 }
 
 bool bigfoot_state::draw() {
@@ -89,6 +98,8 @@ bool bigfoot_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
+    SDL_GetMouseState(&MouseX, &MouseY);
+
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
@@ -98,6 +109,7 @@ bool bigfoot_state::draw() {
         case 0:
         message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
         textColor = bigfootC;
+        inConvoB = true;
         break;
 
         case 1:
@@ -155,6 +167,7 @@ bool bigfoot_state::draw() {
         textColor = bigfootC;
         firstVisitB = false;
         dialogueLine = 0;
+        inConvoB = false;
         break;
 
         default : break;
@@ -166,6 +179,7 @@ bool bigfoot_state::draw() {
         case 1:
         message = "Welcome back, what can I do ya for";
         textColor = bigfootC;
+        inConvoB = true;
         break;
 
         case 2:
@@ -192,6 +206,8 @@ bool bigfoot_state::draw() {
         message = "Deal, I'll be back with the honey.";
         textColor = mothmanC;
         hereForSmore = false;
+        inConvoB = false;
+        honeyRequest = true;
         break;
 
         default : break;
@@ -263,12 +279,22 @@ bool bigfoot_state::handle_event(const SDL_Event &e) {
     switch(e.type) {
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          case SDLK_SPACE:  transition("mainArea"); result = true;   break;
+          case SDLK_SPACE:
+          if(!inConvoB)
+            transition("mainArea");
+          result = true;   break;
           default:  break;
         } break;
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
+
+                if(checkCollision(MouseX, MouseY, moveBackMAR) && !inConvoB)
+                  transition("mainArea");
+
+                if(askBigfootForSmore && checkCollision(MouseX, MouseY, bigfootR))
+                    hereForSmore = true;
+
                 dialogueLine++;
                 result = true;
                 break;

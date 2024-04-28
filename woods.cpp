@@ -8,11 +8,11 @@
 
 using namespace std;
 
-string eyes_message;
 bool firstVisitE = false;
 bool askForSmore = false;
 bool haveSmore = false;
 bool noMoreDialogue = false;
+bool inConvoE = false;
 
 
 woods_state::woods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
@@ -21,12 +21,18 @@ woods_state::woods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SD
      * Keep in mind this only happens once at the start of the appliacation.
      */
 
-     w = IMG_Load("./gameImages/woods.png");
+     w = IMG_Load("./gameImages/Woods.png");
      tw = SDL_CreateTextureFromSurface(rend, w);
      SDL_FreeSurface(w);
      w = nullptr;
 
+     e = IMG_Load("./gameImages/eyes.png");
+     te = SDL_CreateTextureFromSurface(rend, e);
+     SDL_FreeSurface(e);
+     e = nullptr;
+
      firstVisitE = true;
+     dialogueLine = 0;
 }
 
 woods_state::~woods_state() {
@@ -38,6 +44,9 @@ woods_state::~woods_state() {
 
      SDL_DestroyTexture(tw);
      tw = nullptr;
+
+     SDL_DestroyTexture(te);
+     te = nullptr;
 }
 
 bool woods_state::enter() {
@@ -60,6 +69,9 @@ bool woods_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     dialogueLine = 0;
+
      return true;
 }
 
@@ -80,6 +92,10 @@ bool woods_state::leave() {
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
        SDL_DestroyTexture(rectTexture[i]);
    }
+
+   dialogueLine = 0;
+   message = "";
+
    return true;
 }
 
@@ -91,15 +107,24 @@ bool woods_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
+    SDL_GetMouseState(&MouseX, &MouseY);
+
+    SDL_RenderClear(rend);
+    SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+    SDL_RenderCopy(rend, tw, nullptr, &imageRect); // display game image
+    if(dialogueLine != 0 || !firstVisitE)
+      SDL_RenderCopy(rend, te, nullptr, &eyesR); // display eyes
+
     if(firstVisitE){
       switch(dialogueLine){
         case 0:
         message = "A campfire? But whose? I don't see anyone.";
         textColor = mothmanC;
+        inConvoE = true;
         break;
 
         case 1:
-        eyes_message = "Hello";
+        message = "Hello";
         textColor = eyesC;
         break;
 
@@ -109,7 +134,7 @@ bool woods_state::draw() {
         break;
 
         case 3:
-        eyes_message = "Sorry, I like the warmth from the fire but I like to stay in the dark tree line.";
+        message = "Sorry, I like the warmth from the fire but I like to stay in the dark tree line.";
         textColor = eyesC;
         break;
 
@@ -119,7 +144,7 @@ bool woods_state::draw() {
         break;
 
         case 5:
-        eyes_message = "How do you know I'm not a human camper?";
+        message = "How do you know I'm not a human camper?";
         textColor = eyesC;
         break;
 
@@ -129,12 +154,12 @@ bool woods_state::draw() {
         break;
 
         case 7:
-        eyes_message = "*blushing*";
+        message = "*blushing*";
         textColor = eyesC;
         break;
 
         case 8:
-        eyes_message = "Yeah you right";
+        message = "Yeah you right";
         textColor = eyesC;
         break;
 
@@ -144,7 +169,7 @@ bool woods_state::draw() {
         break;
 
         case 10:
-        eyes_message = "Yes, yes, of course. But what are you doing out here? I've never seen you here before...";
+        message = "Yes, yes, of course. But what are you doing out here? I've never seen you here before...";
         textColor = eyesC;
         break;
 
@@ -154,7 +179,7 @@ bool woods_state::draw() {
         break;
 
         case 12:
-        eyes_message = "And you thought the best place to figure that out was the forest?";
+        message = "And you thought the best place to figure that out was the forest?";
         textColor = eyesC;
         break;
 
@@ -164,7 +189,7 @@ bool woods_state::draw() {
         break;
 
         case 14:
-        eyes_message = "There are a lot of stones out here.";
+        message = "There are a lot of stones out here.";
         textColor = eyesC;
         break;
 
@@ -174,7 +199,7 @@ bool woods_state::draw() {
         break;
 
         case 16:
-        eyes_message = "First you need to do something for me.";
+        message = "First you need to do something for me.";
         textColor = eyesC;
         break;
 
@@ -184,7 +209,7 @@ bool woods_state::draw() {
         break;
 
         case 18:
-        eyes_message = "I want a smore.";
+        message = "I want a smore.";
         textColor = eyesC;
         break;
 
@@ -194,8 +219,9 @@ bool woods_state::draw() {
         break;
 
         case 20:
-        eyes_message = "Normally I just want the warmth, but I have a rather large hankering for a smore. Talking makes me peckish.";
+        message = "Normally I just want the warmth, but I have a rather large hankering for a smore.";
         textColor = eyesC;
+        stringColor(rend, textX, textY+15,  "Talking makes me peckish.", textColor);
         break;
 
         case 21:
@@ -204,7 +230,7 @@ bool woods_state::draw() {
         break;
 
         case 22:
-        eyes_message =  "Deal.";
+        message =  "Deal.";
         textColor = eyesC;
         break;
 
@@ -213,7 +239,8 @@ bool woods_state::draw() {
         textColor = mothmanC;
         dialogueLine = 0;
         firstVisitE = false;
-        askForSmore = true;
+        inConvoE = false;
+        askBigfootForSmore = true;
         break;
 
         default: break;
@@ -222,14 +249,15 @@ bool woods_state::draw() {
 
     if(askForSmore){
       switch(dialogueLine){
-        case 1:
-        eyes_message = "You have my smore yet?";
+        case 0:
+        message = "You have my smore yet?";
         textColor = eyesC;
         break;
 
-        case 2:
+        case 1:
         message = "Not yet. I'll be back.";
         textColor = mothmanC;
+        askForSmore = false;
         break;
 
         default: break;
@@ -244,7 +272,7 @@ bool woods_state::draw() {
         break;
 
         case 2:
-        eyes_message = "MMH! Delicious.";
+        message = "MMH! Delicious.";
         textColor = eyesC;
         break;
 
@@ -254,7 +282,7 @@ bool woods_state::draw() {
         break;
 
         case 4:
-        eyes_message = "A deals a deal. What do you want to know?";
+        message = "A deals a deal. What do you want to know?";
         textColor = eyesC;
         break;
 
@@ -264,7 +292,7 @@ bool woods_state::draw() {
         break;
 
         case 6:
-        eyes_message = "You yourself said that I have no body.";
+        message = "You yourself said that I have no body.";
         textColor = eyesC;
         break;
 
@@ -274,7 +302,7 @@ bool woods_state::draw() {
         break;
 
         case 8:
-        eyes_message = "Fair, but I had nothing to do with it. I didn't even know the power was out until you told me.";
+        message = "Fair, but I had nothing to do with it. I didn't even know the power was out until you told me.";
         textColor = eyesC;
         break;
 
@@ -284,7 +312,7 @@ bool woods_state::draw() {
         break;
 
         case 10:
-        eyes_message = "Actually, yes. The mountain has an abnormal warmth eminating from it.";
+        message = "Actually, yes. The mountain has an abnormal warmth eminating from it.";
         textColor = eyesC;
         break;
 
@@ -294,7 +322,7 @@ bool woods_state::draw() {
         break;
 
         case 12:
-        eyes_message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at than stones.";
+        message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at than stones.";
         textColor = eyesC;
         break;
 
@@ -304,12 +332,12 @@ bool woods_state::draw() {
         break;
 
         case 14:
-        eyes_message = "Also, take this. I found it near the mountain earlier. Maybe you can find a use for it.";
+        message = "Also, take this. I found it near the mountain earlier. Maybe you can find a use for it.";
         textColor = eyesC;
         break;
 
         case 15:
-        eyes_message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
+        message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
         textColor = eyesC;
         haveSmore = false;
         noMoreDialogue = true;
@@ -320,9 +348,13 @@ bool woods_state::draw() {
     }
 
     if(noMoreDialogue){
-      eyes_message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
+      message = "Good luck getting your power back on. Go to the mountain. The answer lies there.";
       textColor = eyesC;
     }
+
+    stringColor(rend, textX, textY, message.c_str(), textColor);
+    SDL_RenderPresent(rend);
+
 
     return true;
 }
@@ -337,8 +369,25 @@ bool woods_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-      case SDL_BUTTON_LEFT:
-         dialogueLine++;
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+          case SDL_BUTTON_LEFT:
+          dialogueLine++;
+
+          if(!inConvoE && checkCollision(MouseX, MouseY, moveBackPathR)){
+            transition("pathToWoods");
+          }
+
+          if(checkCollision(MouseX, MouseY, eyesR)){
+            dialogueLine = 0;
+            askForSmore = true;
+          }
+
+
+          break;
+          default: break;
+         }
+
          result = true;
          break;
     default:  break;

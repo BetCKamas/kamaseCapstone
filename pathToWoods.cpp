@@ -83,6 +83,31 @@ bool pathToWoods_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
+
+    SDL_GetMouseState(&MouseX, &MouseY);
+
+    SDL_RenderClear(rend);
+    SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+    SDL_RenderCopy(rend, tptw, nullptr, &imageRect); // display game image
+    //SDL_SetRenderDrawColor(rend, 20,20,20,255);
+    //SDL_RenderFillRect(rend, &moveBackDR);
+    SDL_RenderPresent(rend);
+/*
+    // for when clicking on bee hive first time
+     message = "Excuse me? Is anyone home?";
+     bee_message = "*bzzt-bzzt*";
+     bee_message = "We're asleep. Come back later.";
+     message = "I'm sorry to bother you, but do you have any honey?";
+     bee_message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
+
+     // clicking on bee hive after the above
+     bee_message = "*bzzt-bzzt*";
+     bee_message = "Unless you have a flower, let us sleep kid.";
+     // have flower
+     message = "I have the flower, here you go.";
+     bee_message = "This is a good flower. Here's your honey kid.";
+*/
+
     return true;
 }
 
@@ -97,23 +122,19 @@ bool pathToWoods_state::handle_event(const SDL_Event &e) {
 
     switch(e.type) {
       // add transition to woods and back to town
-      case SDL_BUTTON_LEFT:
-        // for when clicking on bee hive first time
-         message = "Excuse me? Is anyone home?";
-         bee_message = "*bzzt-bzzt*";
-         bee_message = "We're asleep. Come back later.";
-         message = "I'm sorry to bother you, but do you have any honey?";
-         bee_message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
-
-         // clicking on bee hive after the above
-         bee_message = "*bzzt-bzzt*";
-         bee_message = "Unless you have a flower, let us sleep kid.";
-         // have flower
-         message = "I have the flower, here you go.";
-         bee_message = "This is a good flower. Here's your honey kid.";
-
-         result = true;
-         break;
+      case SDL_MOUSEBUTTONDOWN:
+        switch (e.button.button){
+          case SDL_BUTTON_LEFT:
+             if(checkCollision(MouseX, MouseY, moveBackDR)){
+              transition("mainArea");
+            }
+             if(checkCollision(MouseX, MouseY, moveIntoWoodsR)){
+                transition("woods");
+              }
+             result = true;
+             break;
+             default: break;
+           } break;
     default:  break;
     }
 

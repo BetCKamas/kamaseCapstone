@@ -16,7 +16,7 @@ mines_state::mines_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SD
      * Keep in mind this only happens once at the start of the appliacation.
      */
 
-     mi = IMG_Load("./gameImages/Maze.png");
+     mi = IMG_Load("./gameImages/Mines.png");
      tmi = SDL_CreateTextureFromSurface(rend, mi);
      SDL_FreeSurface(mi);
      mi = nullptr;
@@ -140,7 +140,7 @@ bool mines_state::handle_event(const SDL_Event &e) {
                 message = "Here it is, my appointment card.";
                 hench_message = "Let me see.";
                 hench_message = "Yes this will do. You can go past.";
-                
+
                 // immediately transition to maze
 
                 result = true;

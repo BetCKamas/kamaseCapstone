@@ -25,6 +25,8 @@ public:
     SDL_Texture* rectTexture[67];
     SDL_Rect rect = imageRect;
 
+    int MouseX, MouseY;
+
     int textX = 35;
     int textY = 590;
 
@@ -55,6 +57,8 @@ public:
 
 extern std::map <std::string, state *>states;
 extern char winnerGoFish;
+extern bool askBigfootForSmore;
+extern bool honeyRequest;
 
 
 #endif  /* __STATE_H__ */
