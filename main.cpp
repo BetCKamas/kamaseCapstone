@@ -30,6 +30,7 @@ const int HEIGHT = 700;
 char winnerGoFish;
 bool askBigfootForSmore;
 bool honeyRequest;
+bool flowerForBees;
 
 map <string, state *>states;
 string current_state = "";

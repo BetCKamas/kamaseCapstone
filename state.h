@@ -40,6 +40,7 @@ public:
     const Uint32 eyesC = (Uint32)0xff064228;
     const Uint32 goatmanC = (Uint32)0xffff0000;
     const Uint32 henchmanC = (Uint32)0xffff9f00;
+    const Uint32 beesC = (Uint32)0xff00dd66;
     Uint32 textColor;
 
     int dialogueLine = 0;
@@ -59,6 +60,7 @@ extern std::map <std::string, state *>states;
 extern char winnerGoFish;
 extern bool askBigfootForSmore;
 extern bool honeyRequest;
+extern bool flowerForBees;
 
 
 #endif  /* __STATE_H__ */

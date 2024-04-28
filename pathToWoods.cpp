@@ -8,7 +8,9 @@
 
 using namespace std;
 
-string bee_message;
+bool askBeesForHoney = false;
+bool noflowerForBees = false;
+bool giveFlowerToBees = false;
 
 pathToWoods_state::pathToWoods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -20,6 +22,9 @@ pathToWoods_state::pathToWoods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Su
      tptw = SDL_CreateTextureFromSurface(rend, ptw);
      SDL_FreeSurface(ptw);
      ptw = nullptr;
+
+     noflowerForBees = false;
+     flowerForBees = false;
 }
 
 pathToWoods_state::~pathToWoods_state() {
@@ -52,6 +57,10 @@ bool pathToWoods_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     message = "";
+     dialogueLine = 0;
+
      return true;
 }
 
@@ -73,6 +82,9 @@ bool pathToWoods_state::leave() {
          SDL_DestroyTexture(rectTexture[i]);
      }
 
+     message = "";
+     dialogueLine = 0;
+
      return true;
 }
 
@@ -89,25 +101,61 @@ bool pathToWoods_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tptw, nullptr, &imageRect); // display game image
-    //SDL_SetRenderDrawColor(rend, 20,20,20,255);
-    //SDL_RenderFillRect(rend, &moveBackDR);
+
+    if(askBeesForHoney)
+       switch(dialogueLine){
+         case 1:
+         message = "Excuse me? Is anyone home?";
+         textColor = mothmanC;
+         break;
+
+         case 2:
+         message = "*bzzt-bzzt* We're asleep. Come back later.";
+         textColor = beesC;
+         break;
+
+         case 3:
+         message = "I'm sorry to bother you, but do you have any honey?";
+         textColor = mothmanC;
+         break;
+
+         case 4:
+         message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
+         textColor = beesC;
+         askBeesForHoney = false;
+         honeyRequest = false;
+         break;
+
+         default: break;
+
+       }
+    }
+
+    if(noflowerForBees){
+      message = "*bzzt-bzzt* Unless you have a flower, let us sleep kid.";
+      textColor = beesC;
+      noflowerForBees = false;
+    }
+
+    if(flowerForBees){
+      switch (dialogueLine){
+        case 1:
+        message = "I have the flower, here you go.";
+        textColor = mothmanC;
+        break;
+
+        case 2:
+        message = "This is a good flower. Here's your honey kid.";
+        textColor = beesC;
+        break;
+
+        default: break;
+
+      }
+    }
+
+    stringColor(rend, textX, textY, message.c_str(), textColor);
     SDL_RenderPresent(rend);
-/*
-    // for when clicking on bee hive first time
-     message = "Excuse me? Is anyone home?";
-     bee_message = "*bzzt-bzzt*";
-     bee_message = "We're asleep. Come back later.";
-     message = "I'm sorry to bother you, but do you have any honey?";
-     bee_message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
-
-     // clicking on bee hive after the above
-     bee_message = "*bzzt-bzzt*";
-     bee_message = "Unless you have a flower, let us sleep kid.";
-     // have flower
-     message = "I have the flower, here you go.";
-     bee_message = "This is a good flower. Here's your honey kid.";
-*/
-
     return true;
 }
 
@@ -127,10 +175,32 @@ bool pathToWoods_state::handle_event(const SDL_Event &e) {
           case SDL_BUTTON_LEFT:
              if(checkCollision(MouseX, MouseY, moveBackDR)){
               transition("mainArea");
-            }
+             }
              if(checkCollision(MouseX, MouseY, moveIntoWoodsR)){
                 transition("woods");
               }
+
+             if(checkCollision(MouseX, MouseY, beesR) && !honeyRequest){
+               message = "I shouldn't do that, I don't want to get stung.";
+             }
+
+             if(checkCollision(MouseX, MouseY, beesR) && honeyRequest){
+               dialogueLine = 0;
+               askBeesForHoney = true;
+             }
+
+             if(checkCollision(MouseX, MouseY, beesR) && !flowerForBees){
+               noflowerForBees = true;
+             }
+
+             if(checkCollision(MouseX, MouseY, beesR) && flowerForBees){
+               dialogueLine = 0;
+               noflowerForBees = false;
+               flowerForBees = true;
+             }
+
+             dialogueLine++;
+
              result = true;
              break;
              default: break;

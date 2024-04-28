@@ -22,6 +22,7 @@ public:
 
     SDL_Rect moveIntoWoodsR {imageRect.x, imageRect.y, imageRect.w/5, imageRect.h};
     SDL_Rect moveBackDR {imageRect.x + imageRect.w - imageRect.w/5, imageRect.y, imageRect.w/5, imageRect.h};
+    SDL_Rect beesR {imageRect.x+360, imageRect.y+165, 100, 110};
 };
 
 #endif  /* __PATHTOWOODS_H__ */
