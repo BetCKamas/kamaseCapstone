@@ -101,8 +101,15 @@ bool pathToWoods_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tptw, nullptr, &imageRect); // display game image
+    if(honeyVisible)
+       SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+    if(flowerVisible)
+       SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+    if(appointmentcardVisible)
+       SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
 
-    if(askBeesForHoney)
+
+    if(askBeesForHoney){
        switch(dialogueLine){
          case 1:
          message = "Excuse me? Is anyone home?";
@@ -147,6 +154,7 @@ bool pathToWoods_state::draw() {
         case 2:
         message = "This is a good flower. Here's your honey kid.";
         textColor = beesC;
+        honeyVisible = true;
         break;
 
         default: break;

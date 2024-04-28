@@ -64,6 +64,9 @@ bool bigfoot_state::enter() {
      dialogueLine = 0;
      message = "";
 
+     if(honeyVisible)
+        haveHoney = true;
+
      return true;
 }
 
@@ -103,6 +106,12 @@ bool bigfoot_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
+    if(honeyVisible)
+       SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+    if(flowerVisible)
+       SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+    if(appointmentcardVisible)
+       SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
 
     if(firstVisitB){
       switch(dialogueLine){
@@ -250,6 +259,9 @@ bool bigfoot_state::draw() {
         case 4:
         message = "This is some good fresh honey. Its perfect for my bread. Thanks kid, here's your smore.";
         textColor = bigfootC;
+        haveHoney = false;
+        honeyVisible = false;
+        noOtherDialogue = true;
         break;
 
         default : break;

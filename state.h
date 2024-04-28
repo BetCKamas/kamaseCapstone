@@ -21,6 +21,18 @@ public:
     TTF_Font *font;
     SDL_Rect imageRect {42, 30, 1112, 510};
 
+    SDL_Texture *th;
+    SDL_Rect honeyRect {790, 578, 90, 103};
+
+    SDL_Texture *tac;
+    SDL_Rect appointmentcardRect {880, 600, 108, 74};
+
+    SDL_Texture *tf;
+    SDL_Rect flowerRect {1000, 578, 70, 103};
+
+    SDL_Texture *ts;
+    SDL_Rect smoreRect {1080, 600, 85, 80};
+
     SDL_Surface* rectSurface;
     SDL_Texture* rectTexture[67];
     SDL_Rect rect = imageRect;
@@ -45,8 +57,6 @@ public:
 
     int dialogueLine = 0;
 
-
-
     state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font);
     ~state();
 
@@ -61,6 +71,11 @@ extern char winnerGoFish;
 extern bool askBigfootForSmore;
 extern bool honeyRequest;
 extern bool flowerForBees;
+extern bool honeyVisible;
+extern bool appointmentcardVisible;
+extern bool flowerVisible;
+extern bool smoreVisible;
+
 
 
 #endif  /* __STATE_H__ */

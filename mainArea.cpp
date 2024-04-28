@@ -20,10 +20,35 @@ mainArea_state::mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface 
     dialogueLine = 0;
     firstVisitMA = true;
 
+    honeyVisible = false;
+    flowerVisible = false;
+    appointmentcardVisible = false;
+    smoreVisible = false;
+
     ma = IMG_Load("./gameImages/MainArea.png");
     tma = SDL_CreateTextureFromSurface(rend, ma);
     SDL_FreeSurface(ma);
     ma = nullptr;
+
+    h = IMG_Load("./gameImages/Honey.png");
+    th = SDL_CreateTextureFromSurface(rend, h);
+    SDL_FreeSurface(h);
+    h = nullptr;
+
+    ac = IMG_Load("./gameImages/Appointmentcard.png");
+    tac = SDL_CreateTextureFromSurface(rend, ac);
+    SDL_FreeSurface(ac);
+    ac = nullptr;
+
+    f = IMG_Load("./gameImages/Flower.png");
+    tf = SDL_CreateTextureFromSurface(rend, f);
+    SDL_FreeSurface(f);
+    f = nullptr;
+
+    s = IMG_Load("./gameImages/Smore.png");
+    ts = SDL_CreateTextureFromSurface(rend, s);
+    SDL_FreeSurface(s);
+    s = nullptr;
 
 }
 
@@ -36,6 +61,18 @@ mainArea_state::~mainArea_state() {
 
     SDL_DestroyTexture(tma);
     tma = nullptr;
+
+    SDL_DestroyTexture(th);
+    th = nullptr;
+
+    SDL_DestroyTexture(tf);
+    tf = nullptr;
+
+    SDL_DestroyTexture(tac);
+    tac = nullptr;
+
+    SDL_DestroyTexture(ts);
+    ts = nullptr;
 
 
     IMG_Quit();
@@ -98,6 +135,14 @@ bool mainArea_state::draw() {
      SDL_RenderClear(rend);
      SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
      SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
+     if(honeyVisible)
+        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+     if(flowerVisible)
+        SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+     if(appointmentcardVisible)
+        SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+     if(smoreVisible)
+        SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
 
      textColor = mothmanC;
 

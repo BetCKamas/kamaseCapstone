@@ -83,6 +83,16 @@ bool mines_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
+
+     if(honeyVisible)
+        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+     if(flowerVisible)
+        SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+     if(appointmentcardVisible)
+        SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+     if(smoreVisible)
+        SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
+
     return true;
 }
 

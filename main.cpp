@@ -31,6 +31,10 @@ char winnerGoFish;
 bool askBigfootForSmore;
 bool honeyRequest;
 bool flowerForBees;
+bool honeyVisible;
+bool flowerVisible;
+bool appointmentcardVisible;
+bool smoreVisible;
 
 map <string, state *>states;
 string current_state = "";
