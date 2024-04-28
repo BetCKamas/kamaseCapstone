@@ -20,7 +20,7 @@ public:
     SDL_Surface *b;
     SDL_Texture *tb;
 
-    SDL_Rect moveBackMAR {imageRect.x, imageRect.y+350, imageRect.w, imageRect.h-350};
+    SDL_Rect moveBackMAR {imageRect.x,  imageRect.y +imageRect.h-imageRect.h/7, imageRect.w, imageRect.h/5};
     SDL_Rect bigfootR {imageRect.x+682, imageRect.y, 218, 300};
 
 };

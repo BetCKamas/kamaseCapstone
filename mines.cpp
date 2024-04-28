@@ -9,6 +9,7 @@
 using namespace std;
 
 string hench_message;
+bool haveAppointment;
 
 mines_state::mines_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -53,6 +54,10 @@ bool mines_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     if(appointmentcardVisible)
+        haveAppointment = true;
+
      return true;
 }
 

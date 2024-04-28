@@ -63,6 +63,7 @@ public:
 extern std::map <std::string, state *>states;
 extern char winnerGoFish;
 extern bool askBigfootForSmore;
+extern bool askBeesForHoney;
 extern bool honeyRequest;
 extern bool flowerForBees;
 extern bool honeyVisible;

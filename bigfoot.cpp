@@ -13,6 +13,9 @@ bool hereForSmore = false;
 bool haveHoney = false;
 bool noOtherDialogue = false;
 bool inConvoB = false;
+bool clickedonbigfoot = false;
+bool gaveHoney = false;
+bool secondVisitB = false;
 
 bigfoot_state::bigfoot_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -64,8 +67,6 @@ bool bigfoot_state::enter() {
      dialogueLine = 0;
      message = "";
 
-     honeyVisible = true;
-
      if(honeyVisible)
         haveHoney = true;
 
@@ -109,12 +110,17 @@ bool bigfoot_state::draw() {
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
 
+    //SDL_SetRenderDrawColor(rend, 20,20,20,255);
+    //SDL_RenderFillRect(rend, &moveBackMAR);
+
     if(honeyVisible)
        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
     if(flowerVisible)
        SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
     if(appointmentcardVisible)
        SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+    if(smoreVisible)
+       SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
 
     if(firstVisitB){
       switch(dialogueLine){
@@ -180,13 +186,14 @@ bool bigfoot_state::draw() {
         firstVisitB = false;
         dialogueLine = 0;
         inConvoB = false;
+        secondVisitB = true;
         break;
 
         default : break;
       }
     }
 
-    if(hereForSmore && !firstVisitB){
+    if(hereForSmore && !firstVisitB && secondVisitB){
       switch(dialogueLine){
         case 1:
         message = "Welcome back, what can I do ya for";
@@ -210,8 +217,9 @@ bool bigfoot_state::draw() {
         break;
 
         case 5:
-        message = "Tell you what kid. I am in need of some honey for my bread. You get me some honey, I'll give you one smore. You'll need to toast it yourself.";
+        message = "Tell you what kid. I am in need of some honey for my bread. You get me some honey,";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15, "I'll give you a smore.", textColor);
         break;
 
         case 6:
@@ -220,6 +228,8 @@ bool bigfoot_state::draw() {
         hereForSmore = false;
         inConvoB = false;
         honeyRequest = true;
+        secondVisitB = false;
+        askBeesForHoney = true;
         break;
 
         default : break;
@@ -266,13 +276,15 @@ bool bigfoot_state::draw() {
         honeyVisible = false;
         smoreVisible = true;
         noOtherDialogue = true;
+        clickedonbigfoot = false;
+        gaveHoney= true;
         break;
 
         default : break;
       }
     }
 
-    if(noOtherDialogue){
+    if(noOtherDialogue && clickedonbigfoot){
       message = "Good luck investigator.";
       textColor = bigfootC;
     }
@@ -310,6 +322,9 @@ bool bigfoot_state::handle_event(const SDL_Event &e) {
 
                 if(askBigfootForSmore && checkCollision(MouseX, MouseY, bigfootR))
                     hereForSmore = true;
+
+                if(gaveHoney && checkCollision(MouseX, MouseY, bigfootR))
+                      clickedonbigfoot = true;
 
                 dialogueLine++;
                 result = true;

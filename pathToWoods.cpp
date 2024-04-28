@@ -8,9 +8,11 @@
 
 using namespace std;
 
-bool askBeesForHoney = false;
 bool noflowerForBees = false;
 bool giveFlowerToBees = false;
+bool firstTalkToBees = true;
+bool secondTalkToBees = false;
+bool clickedonbees = false;
 
 pathToWoods_state::pathToWoods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -23,7 +25,8 @@ pathToWoods_state::pathToWoods_state(SDL_Renderer *rend, SDL_Window *win, SDL_Su
      SDL_FreeSurface(ptw);
      ptw = nullptr;
 
-     noflowerForBees = false;
+     askBeesForHoney = false;
+     noflowerForBees = true;
      flowerForBees = false;
 }
 
@@ -61,8 +64,8 @@ bool pathToWoods_state::enter() {
      message = "";
      dialogueLine = 0;
 
-     //if(flowerVisible)
-      //  flowerForBees = true;
+     if(flowerVisible)
+        flowerForBees = true;
 
      return true;
 }
@@ -104,7 +107,7 @@ bool pathToWoods_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tptw, nullptr, &imageRect); // display game image
-/*
+
     if(honeyVisible){
        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
     }
@@ -117,11 +120,11 @@ bool pathToWoods_state::draw() {
     if(smoreVisible){
        SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
     }
-    */
-    if(askBeesForHoney){
+
+    if(askBeesForHoney && firstTalkToBees && clickedonbees){
        switch(dialogueLine){
          case 1:
-         message = "Excuse me? Is anyone home?";
+         message = "Excuse me?";
          textColor = mothmanC;
          break;
 
@@ -139,7 +142,10 @@ bool pathToWoods_state::draw() {
          message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
          textColor = beesC;
          askBeesForHoney = false;
-         honeyRequest = false;
+         honeyRequest = true;
+         firstTalkToBees = false;
+         secondTalkToBees = true;
+         dialogueLine = 0;
          break;
 
          default: break;
@@ -147,13 +153,7 @@ bool pathToWoods_state::draw() {
        }
     }
 
-    if(noflowerForBees){
-      message = "*bzzt-bzzt* Unless you have a flower, let us sleep kid.";
-      textColor = beesC;
-      noflowerForBees = false;
-    }
-
-    if(flowerForBees){
+    if(flowerForBees &&  secondTalkToBees && clickedonbees){
       switch (dialogueLine){
         case 1:
         message = "I have the flower, here you go.";
@@ -164,12 +164,17 @@ bool pathToWoods_state::draw() {
         message = "This is a good flower. Here's your honey kid.";
         textColor = beesC;
         honeyVisible = true;
+        flowerVisible = false;
+        flowerForBees = false;
+        clickedonbees = false;
+        secondTalkToBees = false;
         break;
 
         default: break;
 
       }
     }
+
 
     stringColor(rend, textX, textY, message.c_str(), textColor);
     SDL_RenderPresent(rend);
@@ -197,23 +202,10 @@ bool pathToWoods_state::handle_event(const SDL_Event &e) {
                 transition("woods");
               }
 
-             if(checkCollision(MouseX, MouseY, beesR) && !honeyRequest){
-               message = "I shouldn't do that, I don't want to get stung.";
+             if(checkCollision(MouseX, MouseY, beesR)){
+               clickedonbees = true;
              }
 
-             if(checkCollision(MouseX, MouseY, beesR) && honeyRequest){
-               dialogueLine = 0;
-               askBeesForHoney = true;
-             }
-
-             if(checkCollision(MouseX, MouseY, beesR) && !flowerForBees){
-               noflowerForBees = true;
-             }
-
-             if(checkCollision(MouseX, MouseY, beesR) && flowerForBees){
-               dialogueLine = 0;
-               noflowerForBees = false;
-             }
 
              dialogueLine++;
 

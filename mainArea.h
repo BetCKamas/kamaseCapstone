@@ -20,6 +20,9 @@ public:
     SDL_Surface *ma = nullptr;
     SDL_Texture *tma = nullptr;
 
+    SDL_Rect flowersLRect {imageRect.x+415, imageRect.y+375, 65, 125};
+    SDL_Rect flowersRRect {imageRect.x+576, imageRect.y+375, 70, 125};
+
     SDL_Rect woodsR {imageRect.x, (imageRect.y + (imageRect.h / 3)), imageRect.w/6, imageRect.h/5};
     SDL_Rect dinerR {imageRect.x + (imageRect.w/3) - 25, (imageRect.y + 2*(imageRect.h / 5) + 25), imageRect.w/3, imageRect.h/4};
     SDL_Rect minesR {dinerR.x+dinerR.w+25, imageRect.y+(imageRect.h/3)-15, imageRect.w/8, imageRect.h/3};

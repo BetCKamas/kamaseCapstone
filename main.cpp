@@ -29,6 +29,7 @@ const int WIDTH = 1200;
 const int HEIGHT = 700;
 char winnerGoFish;
 bool askBigfootForSmore;
+bool askBeesForHoney;
 bool honeyRequest;
 bool flowerForBees;
 bool honeyVisible = false;
@@ -38,9 +39,7 @@ bool smoreVisible = false;
 SDL_Texture *th;
 SDL_Texture *tac;
 SDL_Texture *tf;
-SDL_Texture *ts; 
-
-
+SDL_Texture *ts;
 
 map <string, state *>states;
 string current_state = "";
@@ -125,9 +124,9 @@ int main(int argc, char *argv[]) {
     f = nullptr;
 
     SDL_Surface *sm = IMG_Load("./gameImages/Smore.png");
-    ts = SDL_CreateTextureFromSurface(rend, s);
+    ts = SDL_CreateTextureFromSurface(rend, sm);
     SDL_FreeSurface(s);
-    s = nullptr;
+    sm = nullptr;
 
 
 

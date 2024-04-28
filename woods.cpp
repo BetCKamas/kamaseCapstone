@@ -121,7 +121,8 @@ bool woods_state::draw() {
        SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
     if(appointmentcardVisible)
        SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
-
+    if(smoreVisible)
+      SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
 
     if(dialogueLine != 0 || !firstVisitE)
       SDL_RenderCopy(rend, te, nullptr, &eyesR); // display eyes
@@ -285,6 +286,7 @@ bool woods_state::draw() {
 
         case 2:
         message = "MMH! Delicious.";
+        smoreVisible = false;
         textColor = eyesC;
         break;
 
@@ -346,6 +348,7 @@ bool woods_state::draw() {
         case 14:
         message = "Also, take this. I found it near the mountain earlier. Maybe you can find a use for it.";
         textColor = eyesC;
+        appointmentcardVisible = true;
         break;
 
         case 15:
@@ -390,7 +393,7 @@ bool woods_state::handle_event(const SDL_Event &e) {
             transition("pathToWoods");
           }
 
-          if(checkCollision(MouseX, MouseY, eyesR)){
+          if(!inConvoE && checkCollision(MouseX, MouseY, eyesR)){
             dialogueLine = 0;
             askForSmore = true;
           }

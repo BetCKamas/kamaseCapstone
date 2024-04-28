@@ -20,6 +20,11 @@ mainArea_state::mainArea_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface 
     dialogueLine = 0;
     firstVisitMA = true;
 
+    honeyVisible = false;
+    smoreVisible = false;
+    flowerVisible = false;
+    appointmentcardVisible = false;
+
     ma = IMG_Load("./gameImages/MainArea.png");
     tma = SDL_CreateTextureFromSurface(rend, ma);
     SDL_FreeSurface(ma);
@@ -60,6 +65,7 @@ bool mainArea_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+     message = "";
      return true;
 }
 
@@ -81,6 +87,8 @@ bool mainArea_state::leave() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     message = "";
 
      return true;
 }
@@ -108,11 +116,12 @@ bool mainArea_state::draw() {
 
      textColor = mothmanC;
 
-     if(firstVisitMA){
+     if(firstVisitMA && dialogueLine == 0){
        stringColor(rend, textX, textY, "The lights are out here too. I wonder whats going on.", textColor);
        stringColor(rend, textX, textY+15, "A mystery is afoot. I should investigate and find out why.", textColor);
      }
 
+     stringColor(rend, textX, textY, message.c_str(), textColor);
      SDL_RenderPresent(rend);
      return true;
 }
@@ -150,6 +159,12 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
                     firstVisitMA = false;
                   }
 
+                  if((checkCollision(MouseX, MouseY, flowersLRect)) || (checkCollision(MouseX, MouseY, flowersRRect))){
+                    message = "What a pretty flower.";
+                    flowerVisible = true;
+                  }
+                  
+                  dialogueLine++;
                   result = true;
                   break;
                   default: break;
