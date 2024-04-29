@@ -129,17 +129,20 @@ bool bigfoot_state::draw() {
     if(smoreVisible)
        SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
 
+
     if(firstVisitB && askBigfootForSmore){
       switch(dialogueLine){
         case 0:
-        message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
+        message = "Welcome to Big's. With this power outage we can't offer too much off the menu";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15, "right now.", textColor);
         inConvoB = true;
         break;
 
         case 1:
-        message = "Oh thats ok, I'm not hungry right now. I just wanted to ask you some questions if that's alright.";
+        message = "Oh thats ok, I'm not hungry right now. I just wanted to ask you some questions";
         textColor = mothmanC;
+        stringColor(rend, textX, textY+15,  "if that's alright.", textColor);
         break;
 
         case 2:
@@ -153,8 +156,9 @@ bool bigfoot_state::draw() {
         break;
 
         case 4:
-        message= "Oh. Theres not much to say really. I was doing some prep working making some bread when the power went.";
+        message= "Oh. Theres not much to say really. I was doing some prep working making some";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15,   "bread when the power went.", textColor);
         break;
 
         case 5:
@@ -221,14 +225,16 @@ bool bigfoot_state::draw() {
     if(firstVisitB && !askBigfootForSmore){
       switch(dialogueLine){
         case 0:
-        message = "Welcome to Big's. With this power outage we can't offer too much off the menu right now.";
+        message = "Welcome to Big's. With this power outage we can't offer too much off the menu";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15, "right now.", textColor);
         inConvoB = true;
         break;
 
         case 1:
-        message = "Oh thats ok, I'm not hungry right now. I just wanted to ask you some questions if that's alright.";
+        message = "Oh thats ok, I'm not hungry right now. I just wanted to ask you some questions";
         textColor = mothmanC;
+        stringColor(rend, textX, textY+15,  "if that's alright.", textColor);
         break;
 
         case 2:
@@ -242,8 +248,9 @@ bool bigfoot_state::draw() {
         break;
 
         case 4:
-        message= "Oh. Theres not much to say really. I was doing some prep working making some bread when the power went.";
+        message= "Oh. Theres not much to say really. I was doing some prep working making some";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15,   "bread when the power went.", textColor);
         break;
 
         case 5:
@@ -365,8 +372,9 @@ bool bigfoot_state::draw() {
         break;
 
         case 4:
-        message = "This is some good fresh honey. Its perfect for my bread. Thanks kid, here's your smore.";
+        message = "This is some good fresh honey. Its perfect for my bread. Thanks kid, here's your";
         textColor = bigfootC;
+        stringColor(rend, textX, textY+15,   "smore.", textColor);
         haveHoney = false;
         honeyVisible = false;
         smoreVisible = true;

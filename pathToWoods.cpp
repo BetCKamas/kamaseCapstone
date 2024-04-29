@@ -148,8 +148,9 @@ bool pathToWoods_state::draw() {
          break;
 
          case 4:
-         message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some honey.";
+         message = "Tell you what kid. Since I'm feeling generous, you bring me a flower. I'll give you some";
          textColor = beesC;
+         stringColor(rend, textX, textY+15,  "honey.", textColor);
          askBeesForHoney = false;
          honeyRequest = true;
          firstTalkToBees = false;

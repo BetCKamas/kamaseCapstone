@@ -156,8 +156,9 @@ bool mines_state::draw() {
          break;
 
          case 5:
-         message = "I'm investigating why the power went out in town. Would you happen to know anything about that?";
+         message = "I'm investigating why the power went out in town. Would you happen to know";
          textColor = mothmanC;
+         stringColor(rend, textX, textY+15, "anything about that?", textColor);
          break;
 
          case 6:
@@ -299,8 +300,9 @@ bool mines_state::draw() {
          break;
 
          case 5:
-         message = "I'm investigating why the power went out in town. Would you happen to know anything about that?";
+         message = "I'm investigating why the power went out in town. Would you happen to know";
          textColor = mothmanC;
+         stringColor(rend, textX, textY+15, "anything about that?", textColor);
          break;
 
          case 6:
@@ -442,8 +444,9 @@ bool mines_state::draw() {
      }
 
      if(!haveAppointment && !firstVisitH && clickedHenchman){
-       message = "I can't go back up to him without an appointment card. Maybe I can find one someplace.";
+       message = "I can't go back up to him without an appointment card. Maybe I can find one";
        textColor = mothmanC;
+       stringColor(rend, textX, textY+15, "someplace.", textColor);
      }
 
      if(haveAppointment && !firstVisitH && clickedHenchman){

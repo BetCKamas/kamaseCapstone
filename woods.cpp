@@ -326,8 +326,9 @@ bool woods_state::draw() {
         break;
 
         case 8:
-        message = "Fair, but I had nothing to do with it. I didn't even know the power was out until you told me.";
+        message = "Fair, but I had nothing to do with it. I didn't even know the power was out until";
         textColor = eyesC;
+        stringColor(rend, textX, textY, "you told me.", textColor);
         break;
 
         case 9:
@@ -346,7 +347,8 @@ bool woods_state::draw() {
         break;
 
         case 12:
-        message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at than stones.";
+        message = "Yes, I almost stayed there to enjoy the warmth. But the fire is prettier to look at";
+        stringColor(rend, textX, textY, "than stones.", textColor);;
         textColor = eyesC;
         break;
 

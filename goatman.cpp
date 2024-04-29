@@ -89,6 +89,8 @@ bool goatman_state::draw() {
     SDL_RenderCopy(rend, tg, nullptr, &imageRect); // display game image
 
 
+
+
     switch(dialogueLine){
          case 0:
          message = "Hello...Boss is it?";

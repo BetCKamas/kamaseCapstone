@@ -85,7 +85,7 @@ bool mothmanHome_state::leave() {
        SDL_SetSurfaceAlphaMod(rectSurface, a);
        SDL_FillRect(rectSurface, NULL, SDL_MapRGBA(rectSurface->format, 0, 0, 0, a));
        rectTexture[i] = SDL_CreateTextureFromSurface(rend, rectSurface);
-       SDL_RenderCopy(rend, rectTexture[i], NULL, &imageRect);
+       SDL_RenderCopy(rend, rectTexture[i], NULL, NULL);
        SDL_RenderPresent(rend);
        SDL_Delay(5);
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
