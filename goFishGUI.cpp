@@ -455,6 +455,7 @@ void goFishGUI_state::checkGameOver(){
     //message = "game over";
     //messageUpdated = true;
     draw();
+    SDL_Delay(1500);
     gameOver = true;
     if(playerBooks > compBooks){
       winnerGoFish = 'p';
@@ -464,7 +465,6 @@ void goFishGUI_state::checkGameOver(){
       winnerGoFish = 't';
     }
     //cout << winnerGoFish << endl;
-    transition("resultGoFish");
   }
 
 }
@@ -474,9 +474,9 @@ goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surfac
      * Initialize all this state's data here (load images, sounds, etc).
      * Keep in mind this only happens once at the start of the appliacation.
      */
-     SDL_initFramerate(&fps);
+     //SDL_initFramerate(&fps);
 
-     srand(time(nullptr));
+     //srand(time(nullptr));
 
      gt = IMG_Load("./gameImages/GameTable.png");
      tgt = SDL_CreateTextureFromSurface(rend, gt);
@@ -503,6 +503,8 @@ goFishGUI_state::goFishGUI_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surfac
      tcb = SDL_CreateTextureFromSurface(rend, cb);
      SDL_FreeSurface(cb);
      cb = nullptr;
+
+     gameOver = false;
 }
 
 goFishGUI_state::~goFishGUI_state() {
@@ -559,6 +561,7 @@ bool goFishGUI_state::enter() {
 
     message = "You can go first Investagator";
     textColor = goatmanC;
+    gameOver = false;
 
     gameSetup(7);
     return true;
@@ -575,8 +578,6 @@ bool goFishGUI_state::leave() {
    possibleComputerAsks.clear();
    cardsOnScreen.clear();
 
-
-
    message = "";
 
    for(int i = 0; i < 67; i++){
@@ -591,7 +592,6 @@ bool goFishGUI_state::leave() {
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
        SDL_DestroyTexture(rectTexture[i]);
    }
-
 
    return true;
 }
@@ -722,6 +722,8 @@ bool goFishGUI_state::draw() {
           hasHandUpdated = false;
           messageUpdated = false;
         }
+      } else {
+        transition("resultGoFish");
       }
 
       return true;
@@ -738,13 +740,11 @@ bool goFishGUI_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-/*
       case SDL_KEYDOWN:
           switch(e.key.keysym.sym) {
-          case SDLK_SPACE:  transition("goatman"); result = true;   break;
+          case SDLK_SPACE:  transition("resultGoFish"); result = true;   break;
           default:  break;
         } break;
-*/
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
   			     case SDL_BUTTON_LEFT:

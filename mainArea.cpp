@@ -54,6 +54,14 @@ bool mainArea_state::enter() {
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
+         if(honeyVisible)
+            SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+         if(flowerVisible)
+            SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+         if(appointmentcardVisible)
+            SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+         if(smoreVisible)
+            SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
          Uint8 a =  Uint8(i*2);
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
          SDL_SetSurfaceAlphaMod(rectSurface, a);
@@ -163,7 +171,7 @@ bool mainArea_state::handle_event(const SDL_Event &e) {
                     message = "What a pretty flower.";
                     flowerVisible = true;
                   }
-                  
+
                   dialogueLine++;
                   result = true;
                   break;

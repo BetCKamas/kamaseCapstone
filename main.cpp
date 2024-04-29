@@ -144,8 +144,8 @@ int main(int argc, char *argv[]) {
     states["woods"] = new woods_state(rend, w, s, to, font);
 
     //transition("goFishGUI");
-    //transition("menu");
-    transition("mainArea");
+    transition("menu");
+    //transition("mainArea");
     //transition("resultGoFish");
     //transition("goatman");
 

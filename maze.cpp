@@ -51,6 +51,10 @@ bool maze_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     dialogueLine = 0;
+     message = "";
+
      return true;
 }
 
@@ -71,6 +75,10 @@ bool maze_state::leave() {
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
        SDL_DestroyTexture(rectTexture[i]);
    }
+
+   dialogueLine = 0;
+   message = "";
+   
    return true;
 }
 
@@ -82,7 +90,18 @@ bool maze_state::draw() {
      * SDL_RenderPresent() for you, too.
      */
 
+    SDL_GetMouseState(&MouseX, &MouseY);
+
+    SDL_RenderClear(rend);
+    SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+    SDL_RenderCopy(rend, tma, nullptr, &imageRect); // display game image
+
     message = "Are these server racks...with GPUs? Is this boss crypto farming?";
+    textColor = mothmanC;
+
+    stringColor(rend, textX, textY, message.c_str(), textColor);
+    SDL_RenderPresent(rend);
+
     return true;
 }
 
@@ -99,9 +118,9 @@ bool maze_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
-                // entering maze
-                // moving through maze
-                // leaving maze
+                if(checkCollision(MouseX, MouseY, moveToGMR)){
+                  transition("goatman");
+                }
                 result = true;
                 break;
                 default: break;

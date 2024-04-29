@@ -19,6 +19,12 @@ public:
 
     SDL_Surface *mh;
     SDL_Texture *tmh;
+
+    SDL_Surface *mhl;
+    SDL_Texture *tmhl;
+
+    SDL_Surface *te;
+    SDL_Texture *tte;
 };
 
 #endif  /* __MOTHMANHOME_H__ */

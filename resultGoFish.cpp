@@ -11,6 +11,7 @@ using namespace std;
 
 bool endConvo = false;
 bool retry = false;
+bool winner = false;;
 
 resultGoFish_state::resultGoFish_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
@@ -138,6 +139,7 @@ bool resultGoFish_state::draw() {
            case 4:
            message = "Thanks Investagator. I'll take you up on that offer.";
            textColor = goatmanC;
+           winner = true;
            break;
 
            default: endConvo = true; break;
@@ -168,6 +170,11 @@ bool resultGoFish_state::handle_event(const SDL_Event &e) {
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
              case SDL_BUTTON_LEFT:
+
+                if(winner){
+                  transition("mothmanHome");
+                }
+
                 dialogueLine++;
                 result = true;
                 break;

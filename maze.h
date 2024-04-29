@@ -19,6 +19,8 @@ public:
 
     SDL_Surface *ma;
     SDL_Texture *tma;
+
+    SDL_Rect moveToGMR {imageRect.x+995, imageRect.y+160, 117, 250};
 };
 
 #endif  /* __MAZE_H__ */

@@ -8,6 +8,8 @@
 
 using namespace std;
 
+bool beginning;
+
 mothmanHome_state::mothmanHome_state(SDL_Renderer *rend, SDL_Window *win, SDL_Surface *s, SDL_Texture *to, TTF_Font *font) : state(rend, win, s, to, font) {
     /*
      * Initialize all this state's data here (load images, sounds, etc).
@@ -18,6 +20,18 @@ mothmanHome_state::mothmanHome_state(SDL_Renderer *rend, SDL_Window *win, SDL_Su
      tmh = SDL_CreateTextureFromSurface(rend, mh);
      SDL_FreeSurface(mh);
      mh = nullptr;
+
+     mhl = IMG_Load("./gameImages/Mothmanhomelight.png");
+     tmhl = SDL_CreateTextureFromSurface(rend, mhl);
+     SDL_FreeSurface(mhl);
+     mhl = nullptr;
+
+     te = IMG_Load("./gameImages/TheEnd.png");
+     tte = SDL_CreateTextureFromSurface(rend, te);
+     SDL_FreeSurface(te);
+     te = nullptr;
+
+     beginning = true;
 }
 
 mothmanHome_state::~mothmanHome_state() {
@@ -29,6 +43,9 @@ mothmanHome_state::~mothmanHome_state() {
 
      SDL_DestroyTexture(tmh);
      tmh = nullptr;
+
+     SDL_DestroyTexture(tmhl);
+     tmhl = nullptr;
 }
 
 bool mothmanHome_state::enter() {
@@ -39,7 +56,7 @@ bool mothmanHome_state::enter() {
      for(int i = 67; i > 0; i--){
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
-         SDL_RenderCopy(rend, tmh, nullptr, &imageRect); // display game image
+         SDL_RenderCopy(rend, tmhl, nullptr, &imageRect); // display game image
          Uint8 a =  Uint8(i*2);
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
          SDL_SetSurfaceAlphaMod(rectSurface, a);
@@ -51,6 +68,9 @@ bool mothmanHome_state::enter() {
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
          SDL_DestroyTexture(rectTexture[i]);
      }
+
+     dialogueLine = 0;
+
      return true;
 }
 
@@ -81,7 +101,59 @@ bool mothmanHome_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
-    return true;
+
+     SDL_GetMouseState(&MouseX, &MouseY);
+
+     SDL_RenderClear(rend);
+     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
+     if(dialogueLine == 0)
+        SDL_RenderCopy(rend, tmhl, nullptr, &imageRect); // display game image
+     else
+        SDL_RenderCopy(rend, tmh, nullptr, &imageRect); // display game image
+
+     if(beginning){
+         switch(dialogueLine){
+           case 0:
+             message = "What a long day. Some relaxation is much needed.";
+             break;
+           case 1:
+             message = "*electricity pops*";
+             break;
+           case 2:
+             message = "Huh? What? No.";
+             break;
+           case 3:
+             message = "Where? Where is my light?";
+             break;
+           case 4:
+             message = "I guess I could go into town tonight. Theres a nice street lamp next to Big's restaurant";
+             break;
+
+           defualt: break;
+
+         }
+       } else {
+            switch(dialogueLine){
+              case 1:
+                SDL_RenderCopy(rend, tte, nullptr, &imageRect);
+                break;
+              case 2:
+                transition("menu");
+                break;
+
+              default:
+              SDL_RenderCopy(rend, tmhl, nullptr, &imageRect);
+              message = "Ahh, lamp.";
+              break;
+            }
+       }
+
+     textColor = mothmanC;
+
+     stringColor(rend, textX, textY, message.c_str(), textColor);
+     SDL_RenderPresent(rend);
+
+     return true;
 }
 
 bool mothmanHome_state::handle_event(const SDL_Event &e) {
@@ -94,24 +166,15 @@ bool mothmanHome_state::handle_event(const SDL_Event &e) {
     bool result = false;
 
     switch(e.type) {
-      case SDL_KEYDOWN:
-          switch(e.key.keysym.sym) {
-          case SDLK_SPACE:  transition("mainArea"); result = true;   break;
-          default:  break;
-        } break;
+
       case SDL_MOUSEBUTTONDOWN:
         switch (e.button.button){
   			     case SDL_BUTTON_LEFT:
-                // beginning
-                message = "What a long day. Some relaxation is much needed.";
-                message = "*electricity pops*";
-                message = "Huh? What? No.";
-                message = "Where? Where is my light?";
-                message = "I guess I could go into town tonight. Theres a nice street lamp next to Big's restaurant";
-
-                // ending
-                message = "Ahh, lamp.";
-
+                dialogueLine++;
+                if(dialogueLine == 5){
+                  beginning = false;
+                  transition("mainArea");
+                }
                 result = true;
                 break;
   		  } break;

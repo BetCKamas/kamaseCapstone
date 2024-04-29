@@ -19,6 +19,9 @@ public:
 
     SDL_Surface *mi;
     SDL_Texture *tmi;
+
+    SDL_Rect henchmanRect {imageRect.x+945, imageRect.y+230, 100, 170};
+    SDL_Rect backRect {imageRect.x, imageRect.y+(imageRect.h/2), 200, imageRect.h/2};
 };
 
 #endif  /* __MINES_H__ */

@@ -52,6 +52,14 @@ bool bigfoot_state::enter() {
          SDL_RenderClear(rend);
          SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
          SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
+         if(honeyVisible)
+            SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
+         if(flowerVisible)
+            SDL_RenderCopy(rend, tf, nullptr, &flowerRect); // display flower image
+         if(appointmentcardVisible)
+            SDL_RenderCopy(rend, tac, nullptr, &appointmentcardRect); // display appointmentcard image
+         if(smoreVisible)
+            SDL_RenderCopy(rend, ts, nullptr, &smoreRect); // display smore image
          Uint8 a =  Uint8(i*2);
          SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_BLEND);
          SDL_SetSurfaceAlphaMod(rectSurface, a);
@@ -90,10 +98,12 @@ bool bigfoot_state::leave() {
        SDL_SetSurfaceBlendMode(rectSurface, SDL_BLENDMODE_NONE);
        SDL_DestroyTexture(rectTexture[i]);
    }
-   return true;
+
 
    dialogueLine = 0;
    message = "";
+
+   return true;
 }
 
 bool bigfoot_state::draw() {
@@ -109,9 +119,6 @@ bool bigfoot_state::draw() {
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, to, nullptr, nullptr); // display overlay
     SDL_RenderCopy(rend, tb, nullptr, &imageRect); // display game image
-
-    //SDL_SetRenderDrawColor(rend, 20,20,20,255);
-    //SDL_RenderFillRect(rend, &moveBackMAR);
 
     if(honeyVisible)
        SDL_RenderCopy(rend, th, nullptr, &honeyRect); // display honey image
@@ -272,16 +279,19 @@ bool bigfoot_state::draw() {
         case 11:
         message = "No problem, come back any time.";
         textColor = bigfootC;
+        inConvoB = false;
+        firstVisitB = false;
+        secondVisitB = true;
         break;
 
         default : break;
       }
     }
 
-    if(hereForSmore && !honeyRequest && secondVisitB){
+    if(hereForSmore && secondVisitB){
       switch(dialogueLine){
         case 1:
-        message = "Welcome back, what can I do ya for";
+        message = "Welcome back, what can I do ya for?";
         textColor = bigfootC;
         inConvoB = true;
         break;
