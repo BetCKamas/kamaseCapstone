@@ -562,6 +562,8 @@ bool goFishGUI_state::enter() {
     message = "You can go first Investagator";
     textColor = goatmanC;
     gameOver = false;
+    winnerGoFish = '\0';
+    numCardsLeft = 38;
 
     gameSetup(7);
     return true;
@@ -578,6 +580,10 @@ bool goFishGUI_state::leave() {
    possibleComputerAsks.clear();
    cardsOnScreen.clear();
 
+   booksUpdated = false;
+   hasHandUpdated = false;
+   messageUpdated = false;
+   gameOver = true;
    message = "";
 
    for(int i = 0; i < 67; i++){
@@ -603,8 +609,7 @@ bool goFishGUI_state::draw() {
      * color and cleared the screen with it and will also call
      * SDL_RenderPresent() for you, too.
      */
-     //winnerGoFish = 't';
-     //cout << winnerGoFish << endl;
+
       SDL_GetMouseState(&MouseX, &MouseY);
       if(!gameOver){
         if(hasHandUpdated || messageUpdated || booksUpdated){

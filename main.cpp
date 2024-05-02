@@ -7,6 +7,7 @@
 #include <SDL_ttf.h>
 #include <SDL2_gfxPrimitives.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include "state.h"
 #include "menu.h"
@@ -40,6 +41,7 @@ SDL_Texture *th;
 SDL_Texture *tac;
 SDL_Texture *tf;
 SDL_Texture *ts;
+Mix_Chunk *transitionNoise = nullptr;
 
 map <string, state *>states;
 string current_state = "";
@@ -49,6 +51,7 @@ bool transition(string s) {
     bool result = true;
 
     if(current_state_ptr) {
+        Mix_PlayChannel(1, transitionNoise, 0);
         current_state_ptr->leave();
     }
 
@@ -79,9 +82,6 @@ bool checkCollision(int MouseX, int MouseY, SDL_Rect a) {
 
 
 int main(int argc, char *argv[]) {
-	  //FPSmanager fps;
-    //SDL_initFramerate(&fps);
-
     TTF_Init();
 
     if (TTF_Init() < 0) {
@@ -91,12 +91,26 @@ int main(int argc, char *argv[]) {
 
     TTF_Font* font = TTF_OpenFont("./Cute_Font/CuteFont-Regular.ttf", 64);
 
+
     SDL_Window *w = nullptr;
     SDL_Surface *s = nullptr;
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO) < 0) {
         cerr << "SDL_Init() fail... " << SDL_GetError() << endl;
         exit(EXIT_FAILURE);
     }
+
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+          cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
+          exit(EXIT_FAILURE);
+      }
+
+    Mix_Music* music = Mix_LoadMUS("./music/detective-stories-198357.mp3");
+    transitionNoise = Mix_LoadWAV("./music/forestwalk-92096.wav");
+
+    Mix_PlayMusic(music, -1);
+
 
     w = SDL_CreateWindow("Mothman P.I.", SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
@@ -131,7 +145,7 @@ int main(int argc, char *argv[]) {
 
 
     states["menu"] = new menu_state(rend, w, s, to, font);
-    //states["credits"] = new credits_state(rend, w, s, to, font);
+    states["credits"] = new credits_state(rend, w, s, to, font);
     states["mainArea"] = new mainArea_state(rend, w, s, to, font);
     states["goFishGUI"] = new goFishGUI_state(rend, w, s, to, font);
     states["resultGoFish"] = new resultGoFish_state(rend, w, s, to, font);
@@ -143,11 +157,7 @@ int main(int argc, char *argv[]) {
     states["mothmanHome"] = new mothmanHome_state(rend, w, s, to, font);
     states["woods"] = new woods_state(rend, w, s, to, font);
 
-    //transition("goFishGUI");
     transition("menu");
-    //transition("mainArea");
-    //transition("resultGoFish");
-    //transition("goatman");
 
     SDL_Event e;
     bool quit = false;
@@ -172,7 +182,6 @@ int main(int argc, char *argv[]) {
         /*
          * Draw everything that matters
          */
-        //SDL_SetRenderDrawColor(rend, 0xDD, 0xBB, 0xFF, 0xFF);
         current_state_ptr->draw();
     }
 
@@ -182,7 +191,15 @@ int main(int argc, char *argv[]) {
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(w);
 
+    Mix_FreeMusic(music);
+  	music = nullptr;
+    Mix_FreeChunk(transitionNoise);
+    transitionNoise = nullptr;
+  	Mix_CloseAudio();
+
+
     IMG_Quit();
+    TTF_Quit();
 
     SDL_Quit();
 

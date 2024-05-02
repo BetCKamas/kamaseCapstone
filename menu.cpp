@@ -83,8 +83,6 @@ menu_state::~menu_state() {
      SDL_DestroyTexture(tts);
      tts = nullptr;
 
-     TTF_Quit();
-     IMG_Quit();
 
 }
 
@@ -112,7 +110,6 @@ bool menu_state::draw() {
 
     SDL_RenderClear(rend);
     SDL_RenderCopy(rend, tts, nullptr, nullptr); // display overlay
-    SDL_SetRenderDrawColor(rend, 0xFF, 0xA5, 0x00, 0xFF);
 
     int MouseX, MouseY;
 

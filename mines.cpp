@@ -237,7 +237,7 @@ bool mines_state::draw() {
          break;
 
          case 21:
-         message = "Well what would it take to get past you.";
+         message = "Well what would it take to get past you?";
          textColor = mothmanC;
          break;
 
@@ -381,7 +381,7 @@ bool mines_state::draw() {
          break;
 
          case 21:
-         message = "Well what would it take to get past you.";
+         message = "Well what would it take to get past you?";
          textColor = mothmanC;
          break;
 

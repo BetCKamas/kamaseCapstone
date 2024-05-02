@@ -372,9 +372,8 @@ bool bigfoot_state::draw() {
         break;
 
         case 4:
-        message = "This is some good fresh honey. Its perfect for my bread. Thanks kid, here's your";
+        message = "This is some good fresh honey. Its perfect for my bread. Thanks kid, here's your smore.";
         textColor = bigfootC;
-        stringColor(rend, textX, textY+15,   "smore.", textColor);
         haveHoney = false;
         honeyVisible = false;
         smoreVisible = true;

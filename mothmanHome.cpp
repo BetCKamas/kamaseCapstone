@@ -143,6 +143,7 @@ bool mothmanHome_state::draw() {
 
               default:
               SDL_RenderCopy(rend, tmhl, nullptr, &imageRect);
+              SDL_RenderCopy(rend, tte, nullptr, &imageRect);
               message = "Ahh, lamp.";
               break;
             }
